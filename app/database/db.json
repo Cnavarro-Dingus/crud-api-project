@@ -1,0 +1,202 @@
+[
+    {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "features": [
+            "Bluetooth",
+            "Navigation"
+        ],
+        "id": 0
+    },
+    {
+        "id": 1,
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2021,
+        "features": [
+            "Sunroof",
+            "Leather Seats"
+        ]
+    },
+    {
+        "id": 2,
+        "make": "BMW",
+        "model": "i7",
+        "year": 2023,
+        "features": [
+            "Electric",
+            "Autopilot"
+        ]
+    },
+    {
+        "id": 3,
+        "make": "Ford",
+        "model": "Focus",
+        "year": 2022,
+        "features": [
+            "Heated Seats",
+            "Backup Camera"
+        ]
+    },
+    {
+        "id": 4,
+        "make": "Chevrolet",
+        "model": "Malibu",
+        "year": 2019,
+        "features": [
+            "Cruise Control",
+            "Bluetooth"
+        ]
+    },
+    {
+        "id": 5,
+        "make": "Nissan",
+        "model": "Altima",
+        "year": 2020,
+        "features": [
+            "Navigation",
+            "Remote Start"
+        ]
+    },
+    {
+        "id": 6,
+        "make": "Hyundai",
+        "model": "Elantra",
+        "year": 2021,
+        "features": [
+            "Apple CarPlay",
+            "Android Auto"
+        ]
+    },
+    {
+        "id": 7,
+        "make": "Kia",
+        "model": "Soul",
+        "year": 2022,
+        "features": [
+            "Heated Steering Wheel",
+            "Blind Spot Monitoring"
+        ]
+    },
+    {
+        "id": 8,
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year": 2023,
+        "features": [
+            "Turbocharged Engine",
+            "Panoramic Sunroof"
+        ]
+    },
+    {
+        "id": 9,
+        "make": "Subaru",
+        "model": "Impreza",
+        "year": 2019,
+        "features": [
+            "All-Wheel Drive",
+            "Rearview Camera"
+        ]
+    },
+    {
+        "id": 10,
+        "make": "Mazda",
+        "model": "3",
+        "year": 2020,
+        "features": [
+            "Heads-Up Display",
+            "Adaptive Cruise Control"
+        ]
+    },
+    {
+        "id": 11,
+        "make": "Tesla",
+        "model": "Model 3",
+        "year": 2021,
+        "features": [
+            "Autopilot",
+            "Electric"
+        ]
+    },
+    {
+        "id": 12,
+        "make": "Audi",
+        "model": "A4",
+        "year": 2022,
+        "features": [
+            "Quattro",
+            "Leather Seats"
+        ]
+    },
+    {
+        "id": 13,
+        "make": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2023,
+        "features": [
+            "Luxury Package",
+            "Navigation"
+        ]
+    },
+    {
+        "id": 14,
+        "make": "Volvo",
+        "model": "S60",
+        "year": 2019,
+        "features": [
+            "Safety Features",
+            "Bluetooth"
+        ]
+    },
+    {
+        "id": 15,
+        "make": "Jaguar",
+        "model": "XE",
+        "year": 2020,
+        "features": [
+            "Sport Package",
+            "Navigation"
+        ]
+    },
+    {
+        "id": 16,
+        "make": "Land Rover",
+        "model": "Discovery",
+        "year": 2021,
+        "features": [
+            "Off-Road Capability",
+            "Luxury Interior"
+        ]
+    },
+    {
+        "id": 17,
+        "make": "Porsche",
+        "model": "911",
+        "year": 2022,
+        "features": [
+            "Performance Package",
+            "Leather Seats"
+        ]
+    },
+    {
+        "id": 18,
+        "make": "Ferrari",
+        "model": "488",
+        "year": 2023,
+        "features": [
+            "Turbocharged Engine",
+            "Luxury Interior"
+        ]
+    },
+    {
+        "id": 19,
+        "make": "Lamborghini",
+        "model": "Huracan",
+        "year": 2019,
+        "features": [
+            "Performance Package",
+            "Luxury Interior"
+        ]
+    }
+]
