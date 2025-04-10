@@ -12,6 +12,7 @@ import {
 import CarService from "../services/CarService";
 import SearchBar from "./SearchBar";
 import { FaChartBar } from "react-icons/fa";
+import ConfirmationModal from "./ConfirmationModal";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -22,6 +23,8 @@ const CarList = () => {
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [showModal, setShowModal] = useState(false);
+  const [carToDelete, setCarToDelete] = useState(null);
 
   // Debounce search term
   useEffect(() => {
@@ -56,23 +59,6 @@ const CarList = () => {
     fetchCars();
   }, [fetchCars]);
 
-  // Function to handle car deletion
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this car?")) {
-      try {
-        await CarService.deleteCar(id);
-        setCars(cars.filter((car) => car.id !== id));
-        setDeleteMessage("Car deleted successfully!");
-        setTimeout(() => {
-          setDeleteMessage("");
-        }, 3000);
-      } catch (err) {
-        setError("Failed to delete car. Please try again.");
-        console.error("Error deleting car:", err);
-      }
-    }
-  };
-
   // Calculate the cars to display on the current page
   const indexOfLastCar = currentPage * itemsPerPage;
   const indexOfFirstCar = indexOfLastCar - itemsPerPage;
@@ -80,6 +66,30 @@ const CarList = () => {
 
   // Handle page change
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleDeleteClick = (id) => {
+    setCarToDelete(id);
+    setShowModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (carToDelete !== null) {
+      try {
+        await CarService.deleteCar(carToDelete);
+        setCars(cars.filter((car) => car.id !== carToDelete));
+        setDeleteMessage("Car deleted successfully!");
+        setTimeout(() => {
+          setDeleteMessage("");
+        }, 3000);
+      } catch (err) {
+        setError("Failed to delete car. Please try again.");
+        console.error("Error deleting car:", err);
+      } finally {
+        setShowModal(false);
+        setCarToDelete(null);
+      }
+    }
+  };
 
   return (
     <div>
@@ -146,7 +156,7 @@ const CarList = () => {
                       variant="danger"
                       size="sm"
                       className="btn-action"
-                      onClick={() => handleDelete(car.id)}
+                      onClick={() => handleDeleteClick(car.id)}
                     >
                       Delete
                     </Button>
@@ -176,6 +186,12 @@ const CarList = () => {
           </Pagination>
         </>
       )}
+      <ConfirmationModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onConfirm={confirmDelete}
+        message="Are you sure you want to delete this car?"
+      />
     </div>
   );
 };

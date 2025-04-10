@@ -31,14 +31,12 @@ const SalesDetails = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        console.log(`Fetching sales data for model: ${model}, year: ${year}`);
         let data;
         if (year) {
           data = await CarService.getSalesByModelAndYear(model, year);
         } else {
           data = await CarService.getSalesByModel(model);
         }
-        console.log("Received sales data:", data);
         setSalesData(data);
       } catch (error) {
         console.error("Error fetching sales data:", error);
