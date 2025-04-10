@@ -4,11 +4,14 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import CarList from "./components/CarList";
 import AddCar from "./components/AddCar";
 import EditCar from "./components/EditCar";
+import SalesDetails from "./components/SalesDetails";
+import SalesOverview from "./components/SalesOverview"; // Import the new component
 import "./App.css";
 // Import icons individually to avoid any potential issues
 import { FaCar } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
+import { FaChartBar } from "react-icons/fa"; // Import FaChartBar
 
 function App() {
   return (
@@ -31,9 +34,19 @@ function App() {
                   to="/add"
                   variant="success"
                   size="sm"
-                  className="d-flex align-items-center"
+                  className="d-flex align-items-center me-3"
                 >
                   <FaPlus className="me-1" /> Add New Car
+                </Button>
+                <Button
+                  as={Link}
+                  to="/sales-overview"
+                  variant="info"
+                  size="sm"
+                  className="d-flex align-items-center"
+                >
+                  <FaChartBar className="me-1" />
+                  Sales Overview
                 </Button>
               </Nav>
             </Navbar.Collapse>
@@ -45,6 +58,9 @@ function App() {
             <Route path="/" element={<CarList />} />
             <Route path="/add" element={<AddCar />} />
             <Route path="/edit/:id" element={<EditCar />} />
+            <Route path="/sales/:model" element={<SalesDetails />} />
+            <Route path="/sales/:model/:year" element={<SalesDetails />} />
+            <Route path="/sales-overview" element={<SalesOverview />} />
           </Routes>
         </Container>
       </div>

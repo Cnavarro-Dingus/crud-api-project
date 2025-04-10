@@ -1,202 +1,128 @@
 [
     {
+        "id": 1,
         "make": "Toyota",
         "model": "Corolla",
         "year": 2020,
-        "features": [
-            "Bluetooth",
-            "Navigation"
-        ],
-        "id": 0
-    },
-    {
-        "id": 1,
-        "make": "Honda",
-        "model": "Civic",
-        "year": 2021,
-        "features": [
-            "Sunroof",
-            "Leather Seats"
-        ]
+        "features": ["Bluetooth", "Air Conditioning", "Backup Camera"]
     },
     {
         "id": 2,
-        "make": "BMW",
-        "model": "i7",
-        "year": 2023,
-        "features": [
-            "Electric",
-            "Autopilot"
-        ]
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2019,
+        "features": ["Cruise Control", "Heated Seats", "Sunroof"]
     },
     {
         "id": 3,
         "make": "Ford",
         "model": "Focus",
-        "year": 2022,
-        "features": [
-            "Heated Seats",
-            "Backup Camera"
-        ]
+        "year": 2021,
+        "features": ["Navigation System", "Blind Spot Monitor", "Apple CarPlay"]
     },
     {
         "id": 4,
         "make": "Chevrolet",
         "model": "Malibu",
-        "year": 2019,
-        "features": [
-            "Cruise Control",
-            "Bluetooth"
-        ]
+        "year": 2022,
+        "features": ["Wi-Fi Hotspot", "Lane Departure Warning", "Remote Start"]
     },
     {
         "id": 5,
         "make": "Nissan",
         "model": "Altima",
-        "year": 2020,
-        "features": [
-            "Navigation",
-            "Remote Start"
-        ]
+        "year": 2021,
+        "features": ["ProPILOT Assist", "All-Wheel Drive", "Android Auto"]
     },
     {
         "id": 6,
-        "make": "Hyundai",
-        "model": "Elantra",
-        "year": 2021,
-        "features": [
-            "Apple CarPlay",
-            "Android Auto"
-        ]
+        "make": "BMW",
+        "model": "3 Series",
+        "year": 2023,
+        "features": ["Gesture Control", "Harman Kardon Sound System", "Heads-Up Display"]
     },
     {
         "id": 7,
-        "make": "Kia",
-        "model": "Soul",
-        "year": 2022,
-        "features": [
-            "Heated Steering Wheel",
-            "Blind Spot Monitoring"
-        ]
+        "make": "Audi",
+        "model": "A4",
+        "year": 2020,
+        "features": ["Virtual Cockpit", "Quattro AWD", "LED Headlights"]
     },
     {
         "id": 8,
-        "make": "Volkswagen",
-        "model": "Golf",
-        "year": 2023,
-        "features": [
-            "Turbocharged Engine",
-            "Panoramic Sunroof"
-        ]
+        "make": "Mercedes-Benz",
+        "model": "C-Class",
+        "year": 2021,
+        "features": ["MBUX System", "Panoramic Roof", "Ambient Lighting"]
     },
     {
         "id": 9,
-        "make": "Subaru",
-        "model": "Impreza",
-        "year": 2019,
-        "features": [
-            "All-Wheel Drive",
-            "Rearview Camera"
-        ]
+        "make": "Volkswagen",
+        "model": "Passat",
+        "year": 2022,
+        "features": ["Digital Cockpit", "Adaptive Cruise Control", "Park Assist"]
     },
     {
         "id": 10,
-        "make": "Mazda",
-        "model": "3",
-        "year": 2020,
-        "features": [
-            "Heads-Up Display",
-            "Adaptive Cruise Control"
-        ]
+        "make": "Hyundai",
+        "model": "Elantra",
+        "year": 2023,
+        "features": ["Wireless Charging", "SmartSense", "Bose Premium Audio"]
     },
     {
         "id": 11,
-        "make": "Tesla",
-        "model": "Model 3",
+        "make": "Kia",
+        "model": "Soul",
         "year": 2021,
-        "features": [
-            "Autopilot",
-            "Electric"
-        ]
+        "features": ["Harman Kardon Audio", "Blind Spot Collision Warning", "Smart Cruise Control"]
     },
     {
         "id": 12,
-        "make": "Audi",
-        "model": "A4",
+        "make": "Mazda",
+        "model": "CX-5",
         "year": 2022,
-        "features": [
-            "Quattro",
-            "Leather Seats"
-        ]
+        "features": ["Skyactiv Technology", "i-Activ AWD", "Mazda Connect"]
     },
     {
         "id": 13,
-        "make": "Mercedes-Benz",
-        "model": "C-Class",
+        "make": "Subaru",
+        "model": "Outback",
         "year": 2023,
-        "features": [
-            "Luxury Package",
-            "Navigation"
-        ]
+        "features": ["Symmetrical AWD", "EyeSight Driver Assist", "Starlink Multimedia"]
     },
     {
         "id": 14,
-        "make": "Volvo",
-        "model": "S60",
-        "year": 2019,
-        "features": [
-            "Safety Features",
-            "Bluetooth"
-        ]
+        "make": "Tesla",
+        "model": "Model 3",
+        "year": 2021,
+        "features": ["Autopilot", "Long Range Battery", "Premium Connectivity"]
     },
     {
         "id": 15,
-        "make": "Jaguar",
-        "model": "XE",
-        "year": 2020,
-        "features": [
-            "Sport Package",
-            "Navigation"
-        ]
+        "make": "Volvo",
+        "model": "XC90",
+        "year": 2022,
+        "features": ["Pilot Assist", "Bowers & Wilkins Audio", "Panoramic Sunroof"]
     },
     {
         "id": 16,
-        "make": "Land Rover",
-        "model": "Discovery",
-        "year": 2021,
-        "features": [
-            "Off-Road Capability",
-            "Luxury Interior"
-        ]
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2019,
+        "features": ["Bluetooth", "Air Conditioning", "Backup Camera"]
     },
     {
         "id": 17,
-        "make": "Porsche",
-        "model": "911",
-        "year": 2022,
-        "features": [
-            "Performance Package",
-            "Leather Seats"
-        ]
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2020,
+        "features": ["Cruise Control", "Heated Seats", "Sunroof"]
     },
     {
         "id": 18,
-        "make": "Ferrari",
-        "model": "488",
-        "year": 2023,
-        "features": [
-            "Turbocharged Engine",
-            "Luxury Interior"
-        ]
-    },
-    {
-        "id": 19,
-        "make": "Lamborghini",
-        "model": "Huracan",
-        "year": 2019,
-        "features": [
-            "Performance Package",
-            "Luxury Interior"
-        ]
+        "make": "Ford",
+        "model": "Focus",
+        "year": 2020,
+        "features": ["Navigation System", "Blind Spot Monitor", "Apple CarPlay"]
     }
 ]

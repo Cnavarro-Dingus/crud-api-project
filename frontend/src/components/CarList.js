@@ -1,8 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Card, Button, Alert, Spinner, Row, Col } from "react-bootstrap";
+import {
+  Card,
+  Button,
+  Alert,
+  Spinner,
+  Row,
+  Col,
+  Pagination,
+} from "react-bootstrap";
 import CarService from "../services/CarService";
-import SearchBar from "./SearchBar"; // Import the SearchBar component
+import SearchBar from "./SearchBar";
+import { FaChartBar } from "react-icons/fa";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -11,12 +20,14 @@ const CarList = () => {
   const [deleteMessage, setDeleteMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // Debounce search term
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500); // 500 milliseconds delay
+    }, 500);
 
     return () => {
       clearTimeout(handler);
@@ -62,13 +73,19 @@ const CarList = () => {
     }
   };
 
+  // Calculate the cars to display on the current page
+  const indexOfLastCar = currentPage * itemsPerPage;
+  const indexOfFirstCar = indexOfLastCar - itemsPerPage;
+  const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <h2 className="page-title">Car List</h2>
 
       <div className="mb-4">
-        {" "}
-        {/* Add margin-bottom to separate the search bar */}
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
 
@@ -94,49 +111,70 @@ const CarList = () => {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
-      ) : cars.length === 0 ? (
+      ) : currentCars.length === 0 ? (
         <Alert variant="info">
           No cars found. Click "Add New Car" to create one.
         </Alert>
       ) : (
-        <Row xs={1} md={2} className="g-4">
-          {cars.map((car) => (
-            <Col key={car.id}>
-              <Card className="h-100 d-flex flex-column">
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title>
-                    {car.make} {car.model}
-                  </Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    Year: {car.year}
-                  </Card.Subtitle>
-                  <Card.Text className="flex-grow-1">
-                    Features:{" "}
-                    {car.features && car.features.length > 0
-                      ? car.features.join(", ")
-                      : "No features"}
-                  </Card.Text>
-                </Card.Body>
-                <Card.Footer className="d-flex justify-content-center">
-                  <Link
-                    to={`/edit/${car.id}`}
-                    className="btn btn-primary btn-sm me-2 btn-action"
-                  >
-                    Edit
-                  </Link>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="btn-action"
-                    onClick={() => handleDelete(car.id)}
-                  >
-                    Delete
-                  </Button>
-                </Card.Footer>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        <>
+          <Row xs={1} md={2} className="g-4">
+            {currentCars.map((car) => (
+              <Col key={car.id}>
+                <Card className="h-100 d-flex flex-column">
+                  <Card.Body className="d-flex flex-column">
+                    <Card.Title>
+                      {car.make} {car.model}
+                    </Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                      Year: {car.year}
+                    </Card.Subtitle>
+                    <Card.Text className="flex-grow-1">
+                      Features:{" "}
+                      {car.features && car.features.length > 0
+                        ? car.features.join(", ")
+                        : "No features"}
+                    </Card.Text>
+                  </Card.Body>
+                  <Card.Footer className="d-flex justify-content-center">
+                    <Link
+                      to={`/edit/${car.id}`}
+                      className="btn btn-primary btn-sm me-2 btn-action"
+                    >
+                      Edit
+                    </Link>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      className="btn-action"
+                      onClick={() => handleDelete(car.id)}
+                    >
+                      Delete
+                    </Button>
+                    <Link
+                      to={`/sales/${car.model}/${car.year}`}
+                      className="btn btn-info btn-sm btn-action"
+                    >
+                      <FaChartBar className="me-1" /> Sales
+                    </Link>
+                  </Card.Footer>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          <Pagination className="mt-4 justify-content-center">
+            {[...Array(Math.ceil(cars.length / itemsPerPage)).keys()].map(
+              (number) => (
+                <Pagination.Item
+                  key={number + 1}
+                  active={number + 1 === currentPage}
+                  onClick={() => handlePageChange(number + 1)}
+                >
+                  {number + 1}
+                </Pagination.Item>
+              )
+            )}
+          </Pagination>
+        </>
       )}
     </div>
   );

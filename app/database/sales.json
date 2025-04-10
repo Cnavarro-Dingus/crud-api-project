@@ -1,0 +1,210 @@
+[
+    {
+        "sale_year": 2020,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "USA",
+        "units_sold": 15000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "France",
+        "units_sold": 15000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "Germany",
+        "units_sold": 15000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "UK",
+        "units_sold": 15000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "Canada",
+        "units_sold": 15000
+    },
+    {
+        "sale_year": 2021,
+        "make": "Honda",
+        "model": "Civic",
+        "release_year": 2019,
+        "country": "Canada",
+        "units_sold": 12000
+    },
+    {
+        "sale_year": 2022,
+        "make": "Ford",
+        "model": "Focus",
+        "release_year": 2021,
+        "country": "UK",
+        "units_sold": 18000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Chevrolet",
+        "model": "Malibu",
+        "release_year": 2022,
+        "country": "Germany",
+        "units_sold": 14000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Nissan",
+        "model": "Altima",
+        "release_year": 2021,
+        "country": "France",
+        "units_sold": 16000
+    },
+    {
+        "sale_year": 2021,
+        "make": "BMW",
+        "model": "3 Series",
+        "release_year": 2023,
+        "country": "Australia",
+        "units_sold": 17000
+    },
+    {
+        "sale_year": 2022,
+        "make": "Audi",
+        "model": "A4",
+        "release_year": 2020,
+        "country": "Japan",
+        "units_sold": 13000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Mercedes-Benz",
+        "model": "C-Class",
+        "release_year": 2021,
+        "country": "South Korea",
+        "units_sold": 19000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Volkswagen",
+        "model": "Passat",
+        "release_year": 2022,
+        "country": "Brazil",
+        "units_sold": 11000
+    },
+    {
+        "sale_year": 2021,
+        "make": "Hyundai",
+        "model": "Elantra",
+        "release_year": 2023,
+        "country": "India",
+        "units_sold": 10000
+    },
+    {
+        "sale_year": 2022,
+        "make": "Kia",
+        "model": "Soul",
+        "release_year": 2021,
+        "country": "USA",
+        "units_sold": 9000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Mazda",
+        "model": "CX-5",
+        "release_year": 2022,
+        "country": "Canada",
+        "units_sold": 8000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Subaru",
+        "model": "Outback",
+        "release_year": 2023,
+        "country": "UK",
+        "units_sold": 7000
+    },
+    {
+        "sale_year": 2021,
+        "make": "Tesla",
+        "model": "Model 3",
+        "release_year": 2021,
+        "country": "Germany",
+        "units_sold": 6000
+    },
+    {
+        "sale_year": 2022,
+        "make": "Volvo",
+        "model": "XC90",
+        "release_year": 2022,
+        "country": "France",
+        "units_sold": 5000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2020,
+        "country": "Australia",
+        "units_sold": 4000
+    },
+    {
+        "sale_year": 2020,
+        "make": "Honda",
+        "model": "Civic",
+        "release_year": 2019,
+        "country": "Japan",
+        "units_sold": 3000
+    },
+    {
+        "sale_year": 2021,
+        "make": "Ford",
+        "model": "Focus",
+        "release_year": 2021,
+        "country": "South Korea",
+        "units_sold": 2000
+    },
+    {
+        "sale_year": 2022,
+        "make": "Chevrolet",
+        "model": "Malibu",
+        "release_year": 2022,
+        "country": "Brazil",
+        "units_sold": 1000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Toyota",
+        "model": "Corolla",
+        "release_year": 2019,
+        "country": "USA",
+        "units_sold": 5000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Honda",
+        "model": "Civic",
+        "release_year": 2020,
+        "country": "Canada",
+        "units_sold": 4000
+    },
+    {
+        "sale_year": 2023,
+        "make": "Ford",
+        "model": "Focus",
+        "release_year": 2020,
+        "country": "UK",
+        "units_sold": 3000
+    }
+]

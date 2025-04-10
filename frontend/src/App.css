@@ -134,7 +134,9 @@ body {
 }
 
 .list-group-item > span {
-  max-width: calc(100% - 100px); /* Set a maximum width for the text container */
+  max-width: calc(
+    100% - 100px
+  ); /* Set a maximum width for the text container */
   word-break: break-word; /* Force text to break at appropriate points */
 }
 
@@ -239,4 +241,11 @@ body {
 .search-bar .form-control:hover {
   border-color: #2980b9; /* Darker shade on hover */
   box-shadow: 0 0 5px rgba(41, 128, 185, 0.5); /* Add shadow on hover */
+}
+
+.navbar .btn {
+  width: 150px; /* Set a fixed width for all buttons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

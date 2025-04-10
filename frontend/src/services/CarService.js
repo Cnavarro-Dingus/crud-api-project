@@ -68,6 +68,64 @@ class CarService {
       throw error;
     }
   }
+
+  // Get sales data by model
+  static async getSalesByModel(model) {
+    try {
+      const response = await axios.get(`${API_URL}/sales?model=${model}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching sales data by model:", error);
+      throw error;
+    }
+  }
+
+  // Get all sales data
+  static async getAllSales() {
+    try {
+      // Set a very high limit to get all sales in one request
+      const response = await axios.get(`${API_URL}/sales?limit=1000`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching all sales data:", error);
+      throw error;
+    }
+  }
+
+  // Get sales data for a specific car
+  static async getSalesForCar(carId) {
+    try {
+      // First get the car details to get its model and year
+      const car = await this.getCarById(carId);
+      if (!car) {
+        throw new Error(`Car with ID ${carId} not found`);
+      }
+      
+      // Then get all sales for that model and year with a high limit to ensure we get all data
+      const response = await axios.get(`${API_URL}/sales?model=${car.model}&release_year=${car.year}&limit=1000`); // Modify this line
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching sales data for car ID ${carId}:`, error);
+      throw error;
+    }
+  }
+
+  // Get sales data by model and year
+  static async getSalesByModelAndYear(model, year) {
+    try {
+      // Build the URL with parameters, only including release_year if it's defined
+      let url = `${API_URL}/sales?model=${model}&limit=1000`;
+      if (year && year !== 'undefined') {
+        url += `&release_year=${year}`;
+      }
+      
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching sales data for model ${model} and year ${year}:`, error);
+      throw error;
+    }
+  }
 }
 
 export default CarService;
