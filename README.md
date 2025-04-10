@@ -27,22 +27,26 @@ crud-api-project/
 
 1. Navigate to the backend directory:
 
-   ```bash   cd backend
+   ```bash
+   cd backend
    ```
 
 2. Create a new conda environment with Python 3.11:
 
-   ```bash   conda create -n car-crud-env python=3.11
+   ```bash
+   conda create -n car-crud-env python=3.11
    ```
 
 3. Activate the environment:
 
-   ```bash   conda activate car-crud-env
+   ```bash
+   conda activate car-crud-env
    ```
 
 4. Install the required packages:
 
-   ```bash   pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
    ```
 
 ### Running the Backend
@@ -51,7 +55,8 @@ crud-api-project/
 
 2. Start the Flask server:
 
-   ```bash   python -m app.main
+   ```bash
+   python -m app.main
    ```
 
 3. The API will be available at <http://localhost:5000>
@@ -66,7 +71,8 @@ crud-api-project/
 
 1. Navigate to the frontend directory:
 
-   ```bash   cd frontend
+   ```bash
+   cd frontend
    ```
 
 2. Install the required packages:
@@ -79,7 +85,8 @@ crud-api-project/
 
 1. Start the development server:
 
-   ```bash   npm start
+   ```bash
+   npm start
    ```
 
 2. The application will be available at <http://localhost:3000>
