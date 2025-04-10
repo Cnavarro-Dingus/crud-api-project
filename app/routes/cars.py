@@ -11,7 +11,7 @@ def ensure_db_exists():
     if not os.path.exists(DB_FILE):
         os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
         with open(DB_FILE, 'w') as f:
-            json.dump([], f, indent=4)  # Inicializar con una lista vacía
+            json.dump([], f, indent=4)  # Initialize with an empty list
 
 def read_db():
     ensure_db_exists()
@@ -45,10 +45,10 @@ def validate_car_data(car_data, cars):
 
 @cars_bp.route('/cars', methods=['GET'])
 def get_cars():
-    model = request.args.get('model')  # Obtener el parámetro 'model' de la URL
+    model = request.args.get('model')  # Get the 'model' parameter from the URL
     cars = read_db()
     if model:
-        # Filtrar coches cuyo modelo contenga el texto proporcionado (sin distinción de mayúsculas/minúsculas)
+        # Filter cars whose model contains the provided text (case insensitive)
         cars = [
             car for car in cars
             if any(word.lower().startswith(model.lower()) for word in car.get('model', '').split())

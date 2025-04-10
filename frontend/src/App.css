@@ -8,15 +8,11 @@
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
-
-/* Gradient background for the body */
 body {
   background: linear-gradient(to right, #f5f7fa, #e3e6f0);
   color: var(--text-color);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-
-/* Card styling with colorful borders */
 .card {
   border: 2px solid var(--primary-color);
   border-radius: 8px;
@@ -24,22 +20,17 @@ body {
   overflow: hidden;
   transition: var(--transition);
 }
-
 .card:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
   transform: translateY(-5px);
-  border-color: #2980b9; /* Darker shade on hover */
+  border-color: #2980b9;
 }
-
 .card-body {
   padding: 1.5rem;
 }
-
-/* Table styling */
 .table {
   margin-bottom: 0;
 }
-
 .table thead th {
   background-color: rgba(52, 152, 219, 0.1);
   color: var(--dark-color);
@@ -47,81 +38,64 @@ body {
   border-top: none;
   border-bottom: 2px solid var(--primary-color);
 }
-
 .table tbody tr:hover {
   background-color: rgba(52, 152, 219, 0.05);
 }
-
-/* Button styling */
 .btn-action {
-  width: 80px; /* Ensure consistent width */
+  width: 80px;
   margin-right: 5px;
 }
-
 .btn-primary {
-  background-color: #5dade2; /* Less intense blue */
+  background-color: #5dade2;
   border-color: #5dade2;
 }
-
 .btn-primary:hover {
   background-color: #3498db;
   border-color: #3498db;
 }
-
 .btn-danger {
-  background-color: #e57373; /* Less intense red */
+  background-color: #e57373;
   border-color: #e57373;
 }
-
 .btn-danger:hover {
   background-color: #e74c3c;
   border-color: #e74c3c;
 }
-
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
-
 .btn-primary:hover {
   background-color: #2980b9;
   border-color: #2980b9;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
 .btn-success {
   background-color: var(--secondary-color);
   border-color: var(--secondary-color);
 }
-
 .btn-success:hover {
   background-color: #27ae60;
   border-color: #27ae60;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
 .btn-danger {
   background-color: var(--danger-color);
   border-color: var(--danger-color);
 }
-
 .btn-danger:hover {
   background-color: #c0392b;
   border-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-
-/* Action buttons container */
 .action-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
 }
-
-/* List group styling */
 .list-group-item {
   border-left: none;
   border-right: none;
@@ -130,50 +104,36 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Ensure items wrap within the container */
+  flex-wrap: wrap;
 }
-
 .list-group-item > span {
-  max-width: calc(
-    100% - 100px
-  ); /* Set a maximum width for the text container */
-  word-break: break-word; /* Force text to break at appropriate points */
+  max-width: calc(100% - 100px);
+  word-break: break-word;
 }
-
 .list-group-item > button {
-  flex-shrink: 0; /* Prevent button from shrinking */
-  margin-left: auto; /* Ensure button stays at the end of the line */
+  flex-shrink: 0;
+  margin-left: auto;
 }
-
 .list-group-item:first-child {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-
 .list-group-item:last-child {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
-/* Alert styling */
 .alert {
   border-radius: 4px;
   box-shadow: var(--shadow);
 }
-
-/* Spinner styling */
 .spinner-border {
   color: var(--primary-color);
 }
-
-/* Container spacing */
 .container.mt-4 {
   margin-top: 2rem !important;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
 }
-
-/* Form card styling */
 .form-card {
   max-width: 600px;
   margin: 0 auto;
@@ -182,69 +142,55 @@ body {
   box-shadow: var(--shadow);
   background-color: #ffffff;
 }
-
-/* Button styling */
 .btn-action {
-  width: 100px; /* Ensure consistent width */
+  width: 100px;
   margin-right: 5px;
 }
-
 .btn-primary {
-  background-color: #5dade2; /* Less intense blue */
+  background-color: #5dade2;
   border-color: #5dade2;
 }
-
 .btn-primary:hover {
   background-color: #3498db;
   border-color: #3498db;
 }
-
 .btn-secondary {
-  background-color: #95a5a6; /* Neutral color for cancel button */
+  background-color: #95a5a6;
   border-color: #95a5a6;
 }
-
 .btn-secondary:hover {
   background-color: #7f8c8d;
   border-color: #7f8c8d;
 }
-
-/* Search bar styling */
 .search-bar {
   margin-bottom: 20px;
 }
-
 .search-bar .input-group-text {
   background-color: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: 4px 0 0 4px;
-  transition: var(--transition); /* Add transition for smooth animation */
+  transition: var(--transition);
 }
-
 .search-bar .input-group-text:hover {
-  background-color: #2980b9; /* Darker shade on hover */
+  background-color: #2980b9;
 }
-
 .search-bar .form-control {
   border: 1px solid var(--primary-color);
   border-radius: 0 4px 4px 0;
   box-shadow: none;
-  transition: var(--transition); /* Add transition for smooth animation */
+  transition: var(--transition);
 }
-
 .search-bar .form-control:focus {
   border-color: #2980b9;
   box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
 }
-
 .search-bar .form-control:hover {
-  border-color: #2980b9; /* Darker shade on hover */
-  box-shadow: 0 0 5px rgba(41, 128, 185, 0.5); /* Add shadow on hover */
+  border-color: #2980b9;
+  box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
 }
-
 .navbar .btn {
-  width: 150px; /* Set a fixed width for all buttons */
+  width: 150px;
   display: flex;
   justify-content: center;
   align-items: center;

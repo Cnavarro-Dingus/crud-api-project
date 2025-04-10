@@ -5,13 +5,9 @@ import CarList from "./components/CarList";
 import AddCar from "./components/AddCar";
 import EditCar from "./components/EditCar";
 import SalesDetails from "./components/SalesDetails";
-import SalesOverview from "./components/SalesOverview"; // Import the new component
+import SalesOverview from "./components/SalesOverview";
 import "./App.css";
-// Import icons individually to avoid any potential issues
-import { FaCar } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
-import { FaHome } from "react-icons/fa";
-import { FaChartBar } from "react-icons/fa"; // Import FaChartBar
+import { FaCar, FaPlus, FaHome, FaChartBar } from "react-icons/fa";
 
 function App() {
   return (
@@ -58,7 +54,6 @@ function App() {
             <Route path="/" element={<CarList />} />
             <Route path="/add" element={<AddCar />} />
             <Route path="/edit/:id" element={<EditCar />} />
-            <Route path="/sales/:model" element={<SalesDetails />} />
             <Route path="/sales/:model/:year" element={<SalesDetails />} />
             <Route path="/sales-overview" element={<SalesOverview />} />
           </Routes>

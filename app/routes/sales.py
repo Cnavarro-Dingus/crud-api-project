@@ -17,12 +17,16 @@ def get_sales():
     country = request.args.get('country')
     model = request.args.get('model')
     sale_year = request.args.get('sale_year')
-    release_year = request.args.get('release_year')  # Make sure this parameter is read
+    release_year = request.args.get('release_year')
+    
+    # Get pagination parameters, with a default that effectively disables pagination
+    # if no specific page/limit is requested
     page = int(request.args.get('page', 1))
-    limit = int(request.args.get('limit', 5))
+    limit = int(request.args.get('limit', 1000))  # Default to a high number
+    
     sales = read_sales_db()
 
-    # Filter by country, model, sale_year, and/or release_year if provided
+    # Filter by parameters if provided
     if country:
         sales = [sale for sale in sales if sale['country'].lower() == country.lower()]
     if model:
@@ -34,7 +38,6 @@ def get_sales():
         except ValueError:
             return jsonify({"error": "Invalid sale_year format. Please provide a valid integer."}), 400
     
-    # Add filtering by release_year
     if release_year:
         try:
             release_year = int(release_year)
@@ -42,9 +45,10 @@ def get_sales():
         except ValueError:
             return jsonify({"error": "Invalid release_year format. Please provide a valid integer."}), 400
 
-    # Implement pagination
-    start = (page - 1) * limit
-    end = start + limit
-    paginated_sales = sales[start:end]
+    # Apply pagination only if a reasonable limit is set
+    if limit < 1000:
+        start = (page - 1) * limit
+        end = start + limit
+        sales = sales[start:end]
 
-    return jsonify(paginated_sales), 200
+    return jsonify(sales), 200

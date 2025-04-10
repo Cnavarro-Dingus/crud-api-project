@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import CarService from "../services/CarService"; // Ensure the file name matches exactly
+import CarService from "../services/CarService";
 
 // Register the necessary scales and elements
 ChartJS.register(
@@ -64,13 +64,18 @@ const SalesDetails = () => {
 
   return (
     <div>
-      <h2>Sales Details for {model} {year ? `(${year})` : ''}</h2>
+      <h2>
+        Sales Details for {model} {year ? `(${year})` : ""}
+      </h2>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>Error: {error}</p>
       ) : salesData.length === 0 ? (
-        <p>No sales data available for this model{year ? ` and year ${year}` : ''}.</p>
+        <p>
+          No sales data available for this model
+          {year ? ` and year ${year}` : ""}.
+        </p>
       ) : (
         <Bar data={chartData} />
       )}

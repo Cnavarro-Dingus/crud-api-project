@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, InputGroup } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa"; // Import the magnifying glass icon
+import { FaSearch } from "react-icons/fa";
 
 const SearchBar = ({ searchTerm, setSearchTerm }) => {
   return (
