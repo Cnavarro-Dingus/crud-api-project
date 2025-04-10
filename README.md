@@ -4,7 +4,7 @@ This is a full-stack CRUD (Create, Read, Update, Delete) application for managin
 
 ## Project Structure
 
-```
+```bash
 crud-api-project/
 ├── app/                # Flask backend API
 │   ├── database/       # Database files
@@ -19,30 +19,30 @@ crud-api-project/
 
 ## Backend Setup
 
-### Prerequisites
+### Backend Prerequisites
 
 - Miniconda with Python 3.11
 
-### Installation
+### Backend Installation
 
 1. Navigate to the backend directory:
-   ```
-   cd backend
+
+   ```bash   cd backend
    ```
 
 2. Create a new conda environment with Python 3.11:
-   ```
-   conda create -n car-crud-env python=3.11
+
+   ```bash   conda create -n car-crud-env python=3.11
    ```
 
 3. Activate the environment:
-   ```
-   conda activate car-crud-env
+
+   ```bash   conda activate car-crud-env
    ```
 
 4. Install the required packages:
-   ```
-   pip install -r requirements.txt
+
+   ```bash   pip install -r requirements.txt
    ```
 
 ### Running the Backend
@@ -50,39 +50,39 @@ crud-api-project/
 1. Make sure you're in the backend directory with the conda environment activated
 
 2. Start the Flask server:
-   ```
-   python -m app.main
+
+   ```bash   python -m app.main
    ```
 
-3. The API will be available at http://localhost:5000
+3. The API will be available at <http://localhost:5000>
 
 ## Frontend Setup
 
-### Prerequisites
+### Frontend Prerequisites
 
 - Node.js and npm
 
-### Installation
+### Frontend Installation
 
 1. Navigate to the frontend directory:
-   ```
-   cd frontend
+
+   ```bash   cd frontend
    ```
 
 2. Install the required packages:
-   ```
+
+   ```bash
    npm install
    ```
 
 ### Running the Frontend
 
 1. Start the development server:
-   ```
-   npm start
+
+   ```bash   npm start
    ```
 
-
-2. The application will be available at http://localhost:3000
+2. The application will be available at <http://localhost:3000>
 
 ## API Endpoints
 
