@@ -21,6 +21,7 @@ const AddCar = () => {
     setError(null);
     try {
       await CarService.createCar(car);
+      setError(null);
       navigate("/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
@@ -35,15 +36,15 @@ const AddCar = () => {
   };
 
   return (
-    <>
+    <div className="fade-in">
       <h2 className="page-title">Add New Car</h2>
       {error && (
-        <Alert variant="danger" onClose={() => setError(null)} dismissible>
+        <Alert variant="danger" onClose={() => setError(null)} dismissible className="form-error slide-in">
           {error}
         </Alert>
       )}
       <CarForm initialCar={initialCar} onSubmit={handleSubmit} error={error} loading={loading} />
-    </>
+    </div>
   );
 };
 

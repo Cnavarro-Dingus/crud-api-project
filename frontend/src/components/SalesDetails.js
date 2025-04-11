@@ -61,21 +61,25 @@ const SalesDetails = () => {
   };
 
   return (
-    <div>
-      <h2>
+    <div className="fade-in">
+      <h2 className="page-title">
         Sales Details for {model} {year ? `(${year})` : ""}
       </h2>
       {loading ? (
-        <p>Loading...</p>
+        <div className="text-center">
+          <p className="pulse">Loading...</p>
+        </div>
       ) : error ? (
-        <p>Error: {error}</p>
+        <p className="slide-in text-danger">{error}</p>
       ) : salesData.length === 0 ? (
-        <p>
+        <p className="slide-in">
           No sales data available for this model
           {year ? ` and year ${year}` : ""}.
         </p>
       ) : (
-        <Bar data={chartData} />
+        <div className="slide-in">
+          <Bar data={chartData} />
+        </div>
       )}
     </div>
   );

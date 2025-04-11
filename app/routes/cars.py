@@ -11,7 +11,7 @@ def ensure_db_exists():
     if not os.path.exists(DB_FILE):
         os.makedirs(os.path.dirname(DB_FILE), exist_ok=True)
         with open(DB_FILE, 'w') as f:
-            json.dump([], f, indent=4)  # Initialize with an empty list
+            json.dump([], f, indent=4)
 
 def read_db():
     ensure_db_exists()
@@ -37,9 +37,15 @@ def validate_car_data(car_data, cars):
     if not re.match(r'^[A-Z][a-zA-Z\s-]*$', car_data['make']):
         return "Make must start with an uppercase letter and contain only letters."
 
-    # Validate that 'year' is numeric
-    if not isinstance(car_data['year'], int):
-        return "Year must be a numeric value."
+    # Validate that 'year' is numeric and within the range 1886 to 2026
+    try:
+        year = int(car_data['year'])
+        if not (1886 <= year <= 2026):
+            return "Year must be a numeric value between 1886 and 2026."
+        # Update the year to ensure it's an integer in the data
+        car_data['year'] = year
+    except (ValueError, TypeError):
+        return "Year must be a numeric value between 1886 and 2026."
 
     return None
 

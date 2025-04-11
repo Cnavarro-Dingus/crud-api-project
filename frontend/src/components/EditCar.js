@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Spinner } from "react-bootstrap"; // Added Spinner
+import { Alert, Spinner } from "react-bootstrap";
 import CarService from "../services/CarService";
 import CarForm from "./CarForm";
 
@@ -29,6 +29,7 @@ const EditCar = () => {
     setError(null);
     try {
       await CarService.updateCar(id, updatedCar);
+      setError(null);
       navigate("/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
@@ -43,19 +44,25 @@ const EditCar = () => {
   };
 
   if (!car) {
-    return <Spinner animation="border" role="status"><span className="visually-hidden">Loading...</span></Spinner>;
+    return (
+      <div className="text-center">
+        <Spinner animation="border" role="status" className="pulse">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
   }
 
   return (
-    <>
+    <div className="fade-in">
       <h2 className="page-title">Edit Car</h2>
       {error && (
-        <Alert variant="danger" onClose={() => setError(null)} dismissible>
+        <Alert variant="danger" onClose={() => setError(null)} dismissible className="form-error slide-in">
           {error}
         </Alert>
       )}
       <CarForm initialCar={car} onSubmit={handleSubmit} error={error} loading={loading} navigate={navigate} />
-    </>
+    </div>
   );
 };
 

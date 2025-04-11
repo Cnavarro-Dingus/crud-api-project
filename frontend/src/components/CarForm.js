@@ -53,12 +53,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     }
     if (!car.year) {
       newErrors.year = "Year is required";
-    } else {
-      const yearNum = parseInt(car.year);
-      const currentYear = new Date().getFullYear();
-      if (isNaN(yearNum) || yearNum < 1900 || yearNum > currentYear + 1) {
-        newErrors.year = `Year must be between 1900 and ${currentYear + 1}`;
-      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -72,7 +66,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
   };
 
   return (
-    <Card className="form-card">
+    <Card className="form-card slide-in">
       <Card.Body>
         <Form onSubmit={handleFormSubmit} className="car-form">
           <Form.Group className="mb-3" controlId="formMake">
@@ -171,12 +165,23 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
             )}
           </Form.Group>
 
-          <div className="d-flex justify-content-between">
-            <Button variant="secondary" onClick={() => navigate("/")}>
+          <div className="d-flex justify-content-between mt-4">
+            <Button 
+              variant="secondary" 
+              onClick={() => navigate ? navigate(-1) : window.history.back()}
+              className="slide-in-right"
+              style={{animationDelay: '0.1s'}}
+            >
               Cancel
             </Button>
-            <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? "Processing..." : "Submit"}
+            <Button 
+              type="submit" 
+              variant="primary" 
+              disabled={loading}
+              className="slide-in-right"
+              style={{animationDelay: '0.2s'}}
+            >
+              {loading ? "Submitting..." : "Submit"}
             </Button>
           </div>
         </Form>

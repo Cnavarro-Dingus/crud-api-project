@@ -9,7 +9,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Nav, Button, Card } from "react-bootstrap";
 import CarService from "../services/CarService";
+import { FaCalendarAlt , FaMapMarkedAlt , FaCarSide  } from "react-icons/fa";
 
 ChartJS.register(
   CategoryScale,
@@ -25,6 +27,8 @@ const SalesOverview = () => {
   const [countrySalesData, setCountrySalesData] = useState([]);
   const [modelSalesData, setModelSalesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeChart, setActiveChart] = useState("annual"); // Default to annual chart
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     const fetchSalesData = async () => {
@@ -117,18 +121,36 @@ const SalesOverview = () => {
       title: {
         display: true,
       },
+      animation: {
+        duration: 1000,
+        easing: 'easeInOutQuart'
+      }
     },
   };
 
-  return (
-    <div>
-      <h2>Sales Overview</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <h3>Total Annual Sales</h3>
-          <div style={{ height: "400px" }}>
+  const handleChartChange = (chartType) => {
+    if (chartType !== activeChart) {
+      setAnimating(true);
+      setTimeout(() => {
+        setActiveChart(chartType);
+        setTimeout(() => {
+          setAnimating(false);
+        }, 50);
+      }, 300);
+    }
+  };
+
+  const renderChart = () => {
+    if (loading) {
+      return <p className="text-center pulse">Loading sales data...</p>;
+    }
+
+    const chartClasses = `chart-container ${animating ? 'chart-exit' : 'chart-enter'}`;
+
+    switch (activeChart) {
+      case "annual":
+        return (
+          <div className={chartClasses}>
             <Bar
               data={{
                 labels: annualSalesData.map(([year]) => year),
@@ -143,9 +165,10 @@ const SalesOverview = () => {
               options={chartOptions}
             />
           </div>
-
-          <h3>Sales Per Country</h3>
-          <div style={{ height: "400px" }}>
+        );
+      case "country":
+        return (
+          <div className={chartClasses}>
             <Bar
               data={{
                 labels: countrySalesData.map(([country]) => country),
@@ -160,9 +183,10 @@ const SalesOverview = () => {
               options={chartOptions}
             />
           </div>
-
-          <h3>Sales Per Model</h3>
-          <div style={{ height: "400px" }}>
+        );
+      case "model":
+        return (
+          <div className={chartClasses}>
             <Bar
               data={{
                 labels: modelSalesData.map(([label]) => label),
@@ -174,11 +198,81 @@ const SalesOverview = () => {
                   },
                 ],
               }}
-              options={chartOptions}
+              options={{
+                ...chartOptions,
+                scales: {
+                  ...chartOptions.scales,
+                  x: {
+                    ...chartOptions.scales.x,
+                    ticks: {
+                      ...chartOptions.scales.x.ticks,
+                      callback: function(value, index) {
+                        // Shorten the labels for better display
+                        const label = this.getLabelForValue(value);
+                        return label.length > 15 ? label.substr(0, 15) + '...' : label;
+                      }
+                    }
+                  }
+                }
+              }}
             />
           </div>
-        </>
-      )}
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="fade-in">
+      <h2 className="page-title">Sales Overview</h2>
+      
+      <Card className="mb-4 chart-selector-card">
+        <Card.Body>
+          <Nav variant="pills" className="chart-selector">
+            <Nav.Item>
+              <Button
+                variant={activeChart === "annual" ? "primary" : "outline-primary"}
+                onClick={() => handleChartChange("annual")}
+                className="chart-btn"
+              >
+                <FaCalendarAlt  className="me-2" /> Annual Sales
+              </Button>
+            </Nav.Item>
+            <Nav.Item>
+              <Button
+                variant={activeChart === "country" ? "primary" : "outline-primary"}
+                onClick={() => handleChartChange("country")}
+                className="chart-btn"
+              >
+                <FaMapMarkedAlt  className="me-2" /> Country Sales
+              </Button>
+            </Nav.Item>
+            <Nav.Item>
+              <Button
+                variant={activeChart === "model" ? "primary" : "outline-primary"}
+                onClick={() => handleChartChange("model")}
+                className="chart-btn"
+              >
+                <FaCarSide  className="me-2" /> Model Sales
+              </Button>
+            </Nav.Item>
+          </Nav>
+        </Card.Body>
+      </Card>
+
+      <Card>
+        <Card.Body>
+          <div className="chart-title">
+            {activeChart === "annual" && <h3>Total Annual Sales</h3>}
+            {activeChart === "country" && <h3>Sales Per Country</h3>}
+            {activeChart === "model" && <h3>Sales Per Model</h3>}
+          </div>
+          <div className="chart-wrapper">
+            {renderChart()}
+          </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 };

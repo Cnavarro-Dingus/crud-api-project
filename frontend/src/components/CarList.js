@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -11,12 +11,12 @@ import {
 } from "react-bootstrap";
 import CarService from "../services/CarService";
 import SearchBar from "./SearchBar";
-import { FaChartBar } from "react-icons/fa";
+import { FaChartBar, FaBackspace, FaPencilRuler} from "react-icons/fa";
 import ConfirmationModal from "./ConfirmationModal";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
-  const [totalCount, setTotalCount] = useState(0); // New state for total count
+  const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteMessage, setDeleteMessage] = useState("");
@@ -26,6 +26,8 @@ const CarList = () => {
   const itemsPerPage = 6;
   const [showModal, setShowModal] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
+  const [pageTransition, setPageTransition] = useState(false);
+  const carListRef = useRef(null);
 
   // Debounce search term
   useEffect(() => {
@@ -60,7 +62,18 @@ const CarList = () => {
   }, [fetchCars]);
 
   // Handle page change
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  // Modify the handlePageChange function to include animation
+  const handlePageChange = (pageNumber) => {
+    if (currentPage !== pageNumber) {
+      setPageTransition(true);
+      
+      // Add a slight delay before changing the page to allow animation to complete
+      setTimeout(() => {
+        setCurrentPage(pageNumber);
+        setPageTransition(false);
+      }, 300);
+    }
+  };
 
   const handleDeleteClick = (id) => {
     setCarToDelete(id);
@@ -87,10 +100,10 @@ const CarList = () => {
   };
 
   return (
-    <div>
+    <div className="fade-in">
       <h2 className="page-title">Car List</h2>
 
-      <div className="mb-4">
+      <div className="mb-4 slide-in">
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
 
@@ -99,33 +112,42 @@ const CarList = () => {
           variant="success"
           onClose={() => setDeleteMessage("")}
           dismissible
+          className="slide-in"
         >
           {deleteMessage}
         </Alert>
       )}
 
       {error && (
-        <Alert variant="danger" onClose={() => setError(null)} dismissible>
+        <Alert variant="danger" onClose={() => setError(null)} dismissible className="slide-in">
           {error}
         </Alert>
       )}
 
       {loading ? (
         <div className="text-center">
-          <Spinner animation="border" role="status">
+          <Spinner animation="border" role="status" className="pulse">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
       ) : cars.length === 0 ? (
-        <Alert variant="info">
+        <Alert variant="info" className="slide-in">
           No cars found. Click "Add New Car" to create one.
         </Alert>
       ) : (
         <>
-          <Row xs={1} md={2} className="g-4">
-            {cars.map((car) => (
+          <Row 
+            xs={1} 
+            md={2} 
+            className={`g-4 ${pageTransition ? 'page-transition-out' : 'page-transition-in'}`}
+            ref={carListRef}
+          >
+            {cars.map((car, index) => (
               <Col key={car.id}>
-                <Card className="h-100 d-flex flex-column">
+                <Card 
+                  className="h-100 d-flex flex-column" 
+                  style={{animationDelay: `${index * 0.1}s`}}
+                >
                   <Card.Body className="d-flex flex-column">
                     <Card.Title>
                       {car.make} {car.model}
@@ -145,7 +167,7 @@ const CarList = () => {
                       to={`/edit/${car.id}`}
                       className="btn btn-primary btn-sm me-2 btn-action"
                     >
-                      Edit
+                      <FaPencilRuler className="me-1" />  Edit
                     </Link>
                     <Button
                       variant="danger"
@@ -153,7 +175,7 @@ const CarList = () => {
                       className="btn-action"
                       onClick={() => handleDeleteClick(car.id)}
                     >
-                      Delete
+                      <FaBackspace className="me-1" />  Delete
                     </Button>
                     <Link
                       to={`/sales/${car.model}/${car.year}`}
@@ -166,17 +188,60 @@ const CarList = () => {
               </Col>
             ))}
           </Row>
-          <Pagination className="mt-4 justify-content-center">
-            {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map(
-              (number) => (
-                <Pagination.Item
-                  key={number + 1}
-                  active={number + 1 === currentPage}
-                  onClick={() => handlePageChange(number + 1)}
-                >
-                  {number + 1}
-                </Pagination.Item>
-              )
+          
+          {/* Enhanced pagination */}
+          <Pagination className="mt-4 justify-content-center pagination-container">
+            {totalCount > itemsPerPage && (
+              <>
+                <Pagination.First 
+                  onClick={() => handlePageChange(1)}
+                  disabled={currentPage === 1}
+                />
+                <Pagination.Prev 
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                />
+                
+                {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map((number) => {
+                  // Show limited page numbers with ellipsis for better UX
+                  const pageNumber = number + 1;
+                  
+                  // Always show first page, last page, current page, and pages around current
+                  if (
+                    pageNumber === 1 || 
+                    pageNumber === Math.ceil(totalCount / itemsPerPage) ||
+                    (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                  ) {
+                    return (
+                      <Pagination.Item
+                        key={pageNumber}
+                        active={pageNumber === currentPage}
+                        onClick={() => handlePageChange(pageNumber)}
+                      >
+                        {pageNumber}
+                      </Pagination.Item>
+                    );
+                  } else if (
+                    (pageNumber === 2 && currentPage > 3) ||
+                    (pageNumber === Math.ceil(totalCount / itemsPerPage) - 1 && 
+                     currentPage < Math.ceil(totalCount / itemsPerPage) - 2)
+                  ) {
+                    // Add ellipsis
+                    return <Pagination.Ellipsis key={`ellipsis-${pageNumber}`} />;
+                  }
+                  
+                  return null;
+                })}
+                
+                <Pagination.Next 
+                  onClick={() => handlePageChange(Math.min(Math.ceil(totalCount / itemsPerPage), currentPage + 1))}
+                  disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
+                />
+                <Pagination.Last 
+                  onClick={() => handlePageChange(Math.ceil(totalCount / itemsPerPage))}
+                  disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
+                />
+              </>
             )}
           </Pagination>
         </>
