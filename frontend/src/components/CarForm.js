@@ -91,7 +91,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               value={car.make}
               onChange={handleChange}
               isInvalid={!!errors.make}
-              placeholder="Enter car make (e.g., Toyota, Honda)"
+              placeholder="Enter car make (e.g., Toyota)"
             />
             <Form.Control.Feedback type="invalid">
               {errors.make}

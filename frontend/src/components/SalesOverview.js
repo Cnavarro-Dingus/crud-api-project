@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
+import { Link } from "react-router-dom";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,13 +10,14 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Nav, Button, Card, Spinner, Alert } from "react-bootstrap";
+import { Card, Spinner, Alert, Button } from "react-bootstrap";
 import CarService from "../services/CarService";
 import {
+  FaDownload,
+  FaArrowLeft,
   FaCalendarAlt,
   FaMapMarkedAlt,
-  FaCarSide,
-  FaDownload,
+  FaCarSide
 } from "react-icons/fa";
 import FilterCard from "./FilterCard";
 import { getContinentFromCountry } from "../utils/countryMapping";
@@ -198,27 +200,72 @@ const SalesOverview = () => {
     const baseOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      layout: {
+        padding: {
+          top: 20,
+          right: 25,
+          bottom: 20,
+          left: 25
+        }
+      },
       scales: {
-        x: {
-          ticks: {
-            autoSkip: false,
-            maxRotation: 90,
-            minRotation: 0,
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: "rgba(0, 0, 0, 0.1)"
           },
+          ticks: {
+            font: {
+              size: 12
+            }
+          }
         },
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45,
+            font: {
+              size: 11
+            }
+          }
+        }
       },
       plugins: {
         legend: {
           position: "top",
+          labels: {
+            font: {
+              size: 14
+            },
+            padding: 20
+          }
         },
         title: {
           display: true,
+          font: {
+            size: 18,
+            weight: 'bold'
+          },
+          padding: {
+            top: 10,
+            bottom: 30
+          }
         },
-        animation: {
-          duration: 1000,
-          easing: "easeInOutQuart",
-        },
-      },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleFont: {
+            size: 14
+          },
+          bodyFont: {
+            size: 13
+          },
+          padding: 15,
+          displayColors: false
+        }
+      }
     };
 
     // Add chart-specific options
@@ -398,58 +445,54 @@ const SalesOverview = () => {
     );
   };
 
-  return (
-    <div className="fade-in">
-      <h2 className="page-title">Sales Overview</h2>
-
-      {error && (
-        <Alert variant="danger" className="mb-4">
-          {error}
-        </Alert>
-      )}
-
-      <Card className="mb-4 chart-selector-card">
+  // Function to render the chart selector buttons
+  const renderChartSelector = () => {
+    return (
+      <Card className="chart-selector-card mb-4">
         <Card.Body>
-          <Nav variant="pills" className="chart-selector">
-            <Nav.Item>
+          <div className="d-flex justify-content-center">
+            <div className="btn-group">
               <Button
-                variant={
-                  activeChart === "annual" ? "primary" : "outline-primary"
-                }
+                variant={activeChart === "annual" ? "primary" : "outline-primary"}
                 onClick={() => handleChartChange("annual")}
-                className="chart-btn"
+                className="d-flex align-items-center"
               >
                 <FaCalendarAlt className="me-2" /> Annual Sales
               </Button>
-            </Nav.Item>
-            <Nav.Item>
               <Button
-                variant={
-                  activeChart === "country" ? "primary" : "outline-primary"
-                }
+                variant={activeChart === "country" ? "primary" : "outline-primary"}
                 onClick={() => handleChartChange("country")}
-                className="chart-btn"
+                className="d-flex align-items-center"
               >
                 <FaMapMarkedAlt className="me-2" /> Country Sales
               </Button>
-            </Nav.Item>
-            <Nav.Item>
               <Button
-                variant={
-                  activeChart === "model" ? "primary" : "outline-primary"
-                }
+                variant={activeChart === "model" ? "primary" : "outline-primary"}
                 onClick={() => handleChartChange("model")}
-                className="chart-btn"
+                className="d-flex align-items-center"
               >
                 <FaCarSide className="me-2" /> Model Sales
               </Button>
-            </Nav.Item>
-          </Nav>
+            </div>
+          </div>
         </Card.Body>
       </Card>
+    );
+  };
 
+  return (
+    <div className="fade-in">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="page-title">Sales Overview</h2>
+        <Link to="/" className="btn btn-outline-primary">
+          <FaArrowLeft className="me-2" /> Back to Cars
+        </Link>
+      </div>
+      
       {renderFilters()}
-
+      
+      {renderChartSelector()}
+      
       <Card>
         <Card.Body>
           <div className="chart-title d-flex justify-content-between align-items-center">
@@ -474,7 +517,7 @@ const SalesOverview = () => {
             </div>
 
             <Button
-              variant="outline-secondary"
+              variant="btn btn-outline-primary"
               size="sm"
               onClick={exportChartData}
               disabled={loading || error}
@@ -482,7 +525,10 @@ const SalesOverview = () => {
               <FaDownload className="me-1" /> Export Data
             </Button>
           </div>
-          <div className="chart-wrapper">{renderChart()}</div>
+          
+          <div className="chart-wrapper" style={{ height: "600px" }}>
+            {renderChart()}
+          </div>
         </Card.Body>
       </Card>
     </div>

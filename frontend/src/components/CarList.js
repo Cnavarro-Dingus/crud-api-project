@@ -11,8 +11,9 @@ import {
 } from "react-bootstrap";
 import CarService from "../services/CarService";
 import SearchBar from "./SearchBar";
-import { FaChartBar, FaBackspace, FaPencilRuler } from "react-icons/fa";
+import { FaChartBar, FaBackspace, FaPencilRuler, FaInfoCircle } from "react-icons/fa";
 import ConfirmationModal from "./ConfirmationModal";
+import CarDetailsModal from "./CarDetailsModal"; // We'll create this component
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -28,6 +29,8 @@ const CarList = () => {
   const [carToDelete, setCarToDelete] = useState(null);
   const [pageTransition, setPageTransition] = useState(false);
   const carListRef = useRef(null);
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // Debounce search term
   useEffect(() => {
@@ -103,6 +106,11 @@ const CarList = () => {
     }
   };
 
+  const handleViewDetails = (car) => {
+    setSelectedCar(car);
+    setShowDetailsModal(true);
+  };
+
   return (
     <div className="fade-in">
       <h2 className="page-title">Car List</h2>
@@ -166,14 +174,24 @@ const CarList = () => {
                     <Card.Subtitle className="mb-2 text-muted">
                       Year: {car.year}
                     </Card.Subtitle>
-                    <Card.Text className="flex-grow-1">
-                      Features:{" "}
-                      {car.features && car.features.length > 0
-                        ? car.features.join(", ")
-                        : "No features"}
+                    <Card.Text className="flex-grow-1 feature-text-container">
+                      <span>Features: </span>
+                      <span className="feature-text">
+                        {car.features && car.features.length > 0
+                          ? car.features.join(", ")
+                          : "No features"}
+                      </span>
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer className="d-flex justify-content-center">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="btn-action me-2"
+                      onClick={() => handleViewDetails(car)}
+                    >
+                      <FaInfoCircle className="me-1" /> Details
+                    </Button>
                     <Link
                       to={`/edit/${car.id}`}
                       className="btn btn-primary btn-sm me-2 btn-action"
@@ -183,7 +201,7 @@ const CarList = () => {
                     <Button
                       variant="danger"
                       size="sm"
-                      className="btn-action"
+                      className="btn-action me-2"
                       onClick={() => handleDeleteClick(car.id)}
                     >
                       <FaBackspace className="me-1" /> Delete
@@ -276,12 +294,23 @@ const CarList = () => {
           </Pagination>
         </>
       )}
+      {/* Confirmation Modal for Delete */}
       <ConfirmationModal
         show={showModal}
         onHide={() => setShowModal(false)}
         onConfirm={confirmDelete}
-        message="Are you sure you want to delete this car?"
+        message="Are you sure you want to delete this car? This action cannot be undone."
+        title="Confirm Delete"
       />
+      
+      {/* Details Modal */}
+      {selectedCar && (
+        <CarDetailsModal
+          show={showDetailsModal}
+          onHide={() => setShowDetailsModal(false)}
+          car={selectedCar}
+        />
+      )}
     </div>
   );
 };

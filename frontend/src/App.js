@@ -4,7 +4,6 @@ import {
   Routes,
   Route,
   Link,
-  useNavigate,
 } from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import CarList from "./components/CarList";
@@ -13,27 +12,7 @@ import EditCar from "./components/EditCar";
 import SalesDetails from "./components/SalesDetails";
 import SalesOverview from "./components/SalesOverview";
 import "./App.css";
-import { FaCar, FaPlus, FaChartBar, FaArrowLeft } from "react-icons/fa";
-
-// Back button component that uses the navigate hook
-const BackButton = () => {
-  const navigate = useNavigate();
-
-  const goBack = () => {
-    navigate(-1);
-  };
-
-  return (
-    <Button
-      variant="outline-light"
-      size="sm"
-      className="d-flex align-items-center me-3"
-      onClick={goBack}
-    >
-      <FaArrowLeft className="me-1" /> Back
-    </Button>
-  );
-};
+import { FaCar, FaPlus, FaChartBar } from "react-icons/fa";
 
 // Main App component
 function App() {
@@ -49,7 +28,6 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto">
-                <BackButton />
                 <Button
                   as={Link}
                   to="/add"

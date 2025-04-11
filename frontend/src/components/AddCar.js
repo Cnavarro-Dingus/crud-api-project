@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Alert } from "react-bootstrap";
-import CarService from "../services/CarService";
+import { FaArrowLeft } from "react-icons/fa";
 import CarForm from "./CarForm";
+import CarService from "../services/CarService";
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -37,22 +38,21 @@ const AddCar = () => {
 
   return (
     <div className="fade-in">
-      <h2 className="page-title">Add New Car</h2>
-      {error && (
-        <Alert
-          variant="danger"
-          onClose={() => setError(null)}
-          dismissible
-          className="form-error slide-in"
-        >
-          {error}
-        </Alert>
-      )}
+      <div className="mb-4 text-end">
+        <Link to="/" className="btn btn-outline-primary">
+          <FaArrowLeft className="me-2" /> Back to Cars
+        </Link>
+      </div>
+      
+      <h2 className="form-page-title mb-4">Add New Car</h2>
+      
+      {error && <Alert variant="danger" className="form-error">{error}</Alert>}
       <CarForm
         initialCar={initialCar}
         onSubmit={handleSubmit}
         error={error}
         loading={loading}
+        navigate={navigate}
       />
     </div>
   );

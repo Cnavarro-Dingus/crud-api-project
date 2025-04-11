@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { Alert, Spinner } from "react-bootstrap";
-import CarService from "../services/CarService";
+import { FaArrowLeft } from "react-icons/fa";
 import CarForm from "./CarForm";
+import CarService from "../services/CarService";
 
 const EditCar = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [car, setCar] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchCar = async () => {
+      setLoading(true);
       try {
         const fetchedCar = await CarService.getCarById(id);
         setCar(fetchedCar);
       } catch (err) {
         setError("Failed to fetch car details. Please try again later.");
         console.error("Error fetching car:", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchCar();
   }, [id]);
 
   const handleSubmit = async (updatedCar) => {
-    setLoading(true);
+    setSubmitting(true);
     setError(null);
     try {
       await CarService.updateCar(id, updatedCar);
-      setError(null);
       navigate("/");
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
@@ -39,40 +43,36 @@ const EditCar = () => {
       }
       console.error("Error updating car:", err);
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
-  if (!car) {
-    return (
-      <div className="text-center">
-        <Spinner animation="border" role="status" className="pulse">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
-    );
-  }
-
   return (
     <div className="fade-in">
-      <h2 className="page-title">Edit Car</h2>
-      {error && (
-        <Alert
-          variant="danger"
-          onClose={() => setError(null)}
-          dismissible
-          className="form-error slide-in"
-        >
-          {error}
-        </Alert>
+      <div className="mb-4 text-end">
+        <Link to="/" className="btn btn-outline-primary">
+          <FaArrowLeft className="me-2" /> Back to Cars
+        </Link>
+      </div>
+      
+      <h2 className="form-page-title mb-4">Edit Car</h2>
+      
+      {loading ? (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status" variant="primary" />
+          <p className="mt-3">Loading car data...</p>
+        </div>
+      ) : error ? (
+        <Alert variant="danger">{error}</Alert>
+      ) : (
+        <CarForm
+          initialCar={car}
+          onSubmit={handleSubmit}
+          error={error}
+          loading={submitting}
+          navigate={navigate}
+        />
       )}
-      <CarForm
-        initialCar={car}
-        onSubmit={handleSubmit}
-        error={error}
-        loading={loading}
-        navigate={navigate}
-      />
     </div>
   );
 };
