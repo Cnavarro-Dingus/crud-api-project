@@ -1,9 +1,9 @@
 {
-  "short_name": "Car CRUD",
-  "name": "Car CRUD Application",
+  "short_name": "Car Managr",
+  "name": "Car Sales Manager",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "carIcon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }
