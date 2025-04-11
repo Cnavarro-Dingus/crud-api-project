@@ -208,7 +208,7 @@ const CarList = () => {
                     </Button>
                     <Link
                       to={`/sales/${car.model}/${car.year}`}
-                      className="btn btn-info btn-sm btn-action"
+                      className="btn btn-success btn-sm btn-action"
                     >
                       <FaChartBar className="me-1" /> Sales
                     </Link>

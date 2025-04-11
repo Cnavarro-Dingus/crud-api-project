@@ -31,7 +31,7 @@ function App() {
                 <Button
                   as={Link}
                   to="/add"
-                  variant="success"
+                  variant="primary"
                   size="sm"
                   className="d-flex align-items-center me-3"
                 >
@@ -40,7 +40,7 @@ function App() {
                 <Button
                   as={Link}
                   to="/sales-overview"
-                  variant="info"
+                  variant="success"
                   size="sm"
                   className="d-flex align-items-center"
                 >
