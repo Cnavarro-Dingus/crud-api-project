@@ -7,13 +7,14 @@ import {
   Spinner,
   Row,
   Col,
-  Pagination,
 } from "react-bootstrap";
-import CarService from "../services/CarService";
-import SearchBar from "./SearchBar";
+import CarService from "../../services/CarService";
+import SearchBar from "../common/SearchBar";
 import { FaChartBar, FaBackspace, FaPencilRuler, FaInfoCircle } from "react-icons/fa";
-import ConfirmationModal from "./ConfirmationModal";
-import CarDetailsModal from "./CarDetailsModal"; // We'll create this component
+import ConfirmationModal from "../modals/ConfirmationModal";
+import CarDetailsModal from "../modals/CarDetailsModal";
+import { useDebounce } from "../../hooks/useDebounce"; // Import custom hook
+import PaginationComponent from "../common/PaginationComponent"; // Import pagination component
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -22,7 +23,7 @@ const CarList = () => {
   const [error, setError] = useState(null);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Use custom hook
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [showModal, setShowModal] = useState(false);
@@ -31,17 +32,6 @@ const CarList = () => {
   const carListRef = useRef(null);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-
-  // Debounce search term
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
 
   // Function to fetch cars
   const fetchCars = useCallback(async () => {
@@ -53,7 +43,7 @@ const CarList = () => {
         itemsPerPage
       );
       setCars(cars);
-      setTotalCount(total_count); // Set total count
+      setTotalCount(total_count);
       setError(null);
     } catch (err) {
       setError("Failed to fetch cars. Please try again later.");
@@ -69,12 +59,9 @@ const CarList = () => {
   }, [fetchCars]);
 
   // Handle page change
-  // Modify the handlePageChange function to include animation
   const handlePageChange = (pageNumber) => {
     if (currentPage !== pageNumber) {
       setPageTransition(true);
-
-      // Add a slight delay before changing the page to allow animation to complete
       setTimeout(() => {
         setCurrentPage(pageNumber);
         setPageTransition(false);
@@ -91,8 +78,11 @@ const CarList = () => {
     if (carToDelete !== null) {
       try {
         await CarService.deleteCar(carToDelete);
-        setCars(cars.filter((car) => car.id !== carToDelete));
         setDeleteMessage("Car deleted successfully!");
+        
+        // Refetch cars after successful deletion
+        fetchCars();
+        
         setTimeout(() => {
           setDeleteMessage("");
         }, 3000);
@@ -218,83 +208,14 @@ const CarList = () => {
             ))}
           </Row>
 
-          {/* Enhanced pagination */}
-          <Pagination className="mt-4 justify-content-center pagination-container">
-            {totalCount > itemsPerPage && (
-              <>
-                <Pagination.First
-                  onClick={() => handlePageChange(1)}
-                  disabled={currentPage === 1}
-                />
-                <Pagination.Prev
-                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                />
-
-                {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map(
-                  (number) => {
-                    // Show limited page numbers with ellipsis for better UX
-                    const pageNumber = number + 1;
-
-                    // Always show first page, last page, current page, and pages around current
-                    if (
-                      pageNumber === 1 ||
-                      pageNumber === Math.ceil(totalCount / itemsPerPage) ||
-                      (pageNumber >= currentPage - 1 &&
-                        pageNumber <= currentPage + 1)
-                    ) {
-                      return (
-                        <Pagination.Item
-                          key={pageNumber}
-                          active={pageNumber === currentPage}
-                          onClick={() => handlePageChange(pageNumber)}
-                        >
-                          {pageNumber}
-                        </Pagination.Item>
-                      );
-                    } else if (
-                      (pageNumber === 2 && currentPage > 3) ||
-                      (pageNumber ===
-                        Math.ceil(totalCount / itemsPerPage) - 1 &&
-                        currentPage < Math.ceil(totalCount / itemsPerPage) - 2)
-                    ) {
-                      // Add ellipsis
-                      return (
-                        <Pagination.Ellipsis key={`ellipsis-${pageNumber}`} />
-                      );
-                    }
-
-                    return null;
-                  }
-                )}
-
-                <Pagination.Next
-                  onClick={() =>
-                    handlePageChange(
-                      Math.min(
-                        Math.ceil(totalCount / itemsPerPage),
-                        currentPage + 1
-                      )
-                    )
-                  }
-                  disabled={
-                    currentPage === Math.ceil(totalCount / itemsPerPage)
-                  }
-                />
-                <Pagination.Last
-                  onClick={() =>
-                    handlePageChange(Math.ceil(totalCount / itemsPerPage))
-                  }
-                  disabled={
-                    currentPage === Math.ceil(totalCount / itemsPerPage)
-                  }
-                />
-              </>
-            )}
-          </Pagination>
+          <PaginationComponent
+            totalCount={totalCount}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
-      {/* Confirmation Modal for Delete */}
       <ConfirmationModal
         show={showModal}
         onHide={() => setShowModal(false)}
@@ -303,7 +224,6 @@ const CarList = () => {
         title="Confirm Delete"
       />
       
-      {/* Details Modal */}
       {selectedCar && (
         <CarDetailsModal
           show={showDetailsModal}

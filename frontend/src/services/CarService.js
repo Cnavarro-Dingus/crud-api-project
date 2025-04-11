@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; // Use environment variable
 
 // Simple cache implementation
 const cache = {
@@ -65,21 +65,17 @@ class CarService {
 
       // Enhanced error handling
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
         const errorObj = new Error(error.response.data.error || "Server error");
         errorObj.status = error.response.status;
         errorObj.data = error.response.data;
         throw errorObj;
       } else if (error.request) {
-        // The request was made but no response was received
         const errorObj = new Error(
           "No response from server. Please check your connection."
         );
         errorObj.status = 0;
         throw errorObj;
       } else {
-        // Something happened in setting up the request
         const errorObj = new Error(error.message || "Error setting up request");
         errorObj.status = -1;
         throw errorObj;
@@ -101,14 +97,17 @@ class CarService {
   }
 
   static createCar(car) {
+    cache.clear(); // Clear cache after data modification
     return this.apiRequest("post", "/cars", car);
   }
 
   static updateCar(id, car) {
+    cache.clear(); // Clear cache after data modification
     return this.apiRequest("put", `/cars/${id}`, car);
   }
 
   static deleteCar(id) {
+    cache.clear(); // Clear cache after data modification
     return this.apiRequest("delete", `/cars/${id}`);
   }
 

@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import CarService from "../services/CarService";
+import CarService from "../../services/CarService";
 
 // Register the necessary scales and elements
 ChartJS.register(
@@ -97,7 +97,7 @@ const SalesDetails = () => {
         <h2 className="page-title">
           Sales Details for {model} {year ? `(${year})` : ""}
         </h2>
-        <Link to="/" className="btn btn-outline-primary">
+        <Link to="/" className="btn btn-secondary">
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>

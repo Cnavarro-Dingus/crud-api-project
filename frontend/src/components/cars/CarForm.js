@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
+import { useFeatures } from "../../hooks/useFeatures"; // Import custom hook
+import { validateCar } from "../../utils/validateCar"; // Import validation utility
 
 const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
   const [car, setCar] = useState(initialCar);
-  const [errors, setErrors] = useState({});
-  const [featureInput, setFeatureInput] = useState("");
+  const {
+    features,
+    featureInput,
+    setFeatureInput,
+    addFeature,
+    removeFeature,
+    errors,
+    setErrors,
+  } = useFeatures(initialCar.features);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -13,55 +22,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     if (errors[name]) {
       setErrors({ ...errors, [name]: null });
     }
-  };
-
-  // Handle features input
-  const addFeature = () => {
-    const normalizedFeature = featureInput.trim().toLowerCase();
-    if (normalizedFeature) {
-      const normalizedFeatures = car.features.map((f) => f.toLowerCase());
-      if (normalizedFeatures.includes(normalizedFeature)) {
-        setErrors({ ...errors, features: "Feature already exists" });
-      } else {
-        setCar({
-          ...car,
-          features: [...car.features, featureInput.trim()],
-        });
-        setFeatureInput("");
-        setErrors({ ...errors, features: null });
-      }
-    }
-  };
-
-  const removeFeature = (index) => {
-    const updatedFeatures = [...car.features];
-    updatedFeatures.splice(index, 1);
-    setCar({
-      ...car,
-      features: updatedFeatures,
-    });
-  };
-
-  // Enhanced validation
-  const validateForm = () => {
-    const newErrors = {};
-    if (!car.make.trim()) {
-      newErrors.make = "Make is required";
-    }
-    if (!car.model.trim()) {
-      newErrors.model = "Model is required";
-    }
-    if (!car.year) {
-      newErrors.year = "Year is required";
-    } else {
-      const yearNum = parseInt(car.year);
-      const currentYear = new Date().getFullYear();
-      if (yearNum < 1900 || yearNum > currentYear + 1) {
-        newErrors.year = `Year must be between 1900 and ${currentYear + 1}`;
-      }
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   // Handle Enter key in feature input
@@ -74,8 +34,10 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSubmit(car);
+    const newErrors = validateCar(car);
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      onSubmit({ ...car, features });
     }
   };
 
@@ -89,7 +51,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="text"
               name="make"
               value={car.make}
-              onChange={handleChange}
+              onChange={handleChange} // Ensure handleChange is used here
               isInvalid={!!errors.make}
               placeholder="Enter car make (e.g., Toyota)"
             />
@@ -104,7 +66,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="text"
               name="model"
               value={car.model}
-              onChange={handleChange}
+              onChange={handleChange} // Ensure handleChange is used here
               isInvalid={!!errors.model}
               placeholder="Enter car model (e.g., Corolla, Civic)"
             />
@@ -119,7 +81,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="number"
               name="year"
               value={car.year}
-              onChange={handleChange}
+              onChange={handleChange} // Ensure handleChange is used here
               isInvalid={!!errors.year}
               placeholder="Enter car year (e.g., 2023)"
               min="1900"
@@ -128,7 +90,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               {errors.year}
             </Form.Control.Feedback>
           </Form.Group>
-
           <Form.Group className="mb-3" controlId="formFeatures">
             <Form.Label>Features</Form.Label>
             <div className="d-flex mb-2">
@@ -159,11 +120,11 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               <div className="invalid-feedback d-block">{errors.features}</div>
             )}
 
-            {car.features && car.features.length > 0 && (
+            {features && features.length > 0 && (
               <div className="mt-2">
                 <p className="mb-1">Added features:</p>
                 <ul className="list-group">
-                  {car.features.map((feature, index) => (
+                  {features.map((feature, index) => (
                     <li
                       key={index}
                       className="list-group-item d-flex justify-content-between align-items-center"
@@ -182,26 +143,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               </div>
             )}
           </Form.Group>
-
-          <div className="d-flex justify-content-between mt-4">
-            <Button
-              variant="secondary"
-              onClick={() => (navigate ? navigate(-1) : window.history.back())}
-              className="slide-in-right"
-              style={{ animationDelay: "0.1s" }}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={loading}
-              className="slide-in-right"
-              style={{ animationDelay: "0.2s" }}
-            >
-              {loading ? "Submitting..." : "Submit"}
-            </Button>
-          </div>
+          {/* ... existing form fields ... */}
         </Form>
       </Card.Body>
     </Card>

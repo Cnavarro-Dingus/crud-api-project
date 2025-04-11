@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Alert } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import CarForm from "./CarForm";
-import CarService from "../services/CarService";
+import CarService from "../../services/CarService";
 
 const AddCar = () => {
   const navigate = useNavigate();
@@ -39,14 +39,14 @@ const AddCar = () => {
   return (
     <div className="fade-in">
       <div className="mb-4 text-end">
-        <Link to="/" className="btn btn-outline-primary">
+        <Link to="/" className="btn btn-secondary"> {/* Updated button styling */}
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
       
       <h2 className="form-page-title mb-4">Add New Car</h2>
       
-      {error && <Alert variant="danger" className="form-error">{error}</Alert>}
+      {error && <Alert variant="danger" className="form-error" aria-live="assertive">{error}</Alert>} {/* Added ARIA attribute */}
       <CarForm
         initialCar={initialCar}
         onSubmit={handleSubmit}

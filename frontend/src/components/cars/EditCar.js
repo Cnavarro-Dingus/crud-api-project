@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { Alert, Spinner } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import CarForm from "./CarForm";
-import CarService from "../services/CarService";
+import CarService from "../../services/CarService";
 
 const EditCar = () => {
   const { id } = useParams();
@@ -50,7 +50,7 @@ const EditCar = () => {
   return (
     <div className="fade-in">
       <div className="mb-4 text-end">
-        <Link to="/" className="btn btn-outline-primary">
+        <Link to="/" className="btn btn-secondary"> {/* Updated button styling */}
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
@@ -59,7 +59,7 @@ const EditCar = () => {
       
       {loading ? (
         <div className="text-center py-5">
-          <Spinner animation="border" role="status" variant="primary" />
+          <Spinner animation="border" role="status" variant="primary" aria-label="Loading" /> {/* Added ARIA label */}
           <p className="mt-3">Loading car data...</p>
         </div>
       ) : error ? (

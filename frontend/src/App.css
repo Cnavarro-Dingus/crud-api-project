@@ -38,12 +38,12 @@ body {
 .btn-action {
   width: 100px;
   margin-right: 5px;
-  transition: all 0.2s ease-in-out;
+  transition: var(--transition);
 }
 
 .btn-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 .btn-primary {
@@ -55,7 +55,7 @@ body {
   background-color: #2980b9;
   border-color: #2980b9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 .btn-success {
@@ -67,7 +67,7 @@ body {
   background-color: #27ae60;
   border-color: #27ae60;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 .btn-danger {
@@ -79,7 +79,7 @@ body {
   background-color: #c0392b;
   border-color: #c0392b;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 .btn-secondary {
@@ -91,7 +91,7 @@ body {
   background-color: #7f8c8d;
   border-color: #7f8c8d;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 .btn-info {
@@ -105,7 +105,7 @@ body {
   border-color: #117a8b;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
 }
 
 /* List Group Styles */
@@ -224,7 +224,7 @@ body {
   text-align: center;
   margin-bottom: 0;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color);
   animation: fadeIn 0.8s ease-in-out;
 }
 
@@ -233,7 +233,7 @@ body {
   text-align: center;
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-color);
   animation: fadeIn 0.8s ease-in-out;
 }
 
@@ -310,4 +310,16 @@ body {
 
 .pulse {
   animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .btn-action {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8f9fa;
+  background-color: var(--light-color); /* Use CSS variable */
 }
 
 code {
@@ -21,7 +21,7 @@ code {
 
 .card {
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow); /* Use CSS variable */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -51,12 +51,12 @@ code {
 
 .btn-action {
   margin-right: 5px;
-  transition: all 0.2s ease-in-out;
+  transition: var(--transition); /* Use CSS variable */
 }
 
 .btn-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow); /* Use CSS variable */
 }
 
 .form-group {
@@ -74,7 +74,7 @@ code {
 }
 
 .form-select {
-  transition: all 0.3s ease;
+  transition: var(--transition); /* Use CSS variable */
   border-radius: 6px;
 }
 
@@ -120,8 +120,8 @@ code {
 /* Filter card styling */
 .filter-card {
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f8f9fa;
+  box-shadow: var(--shadow); /* Use CSS variable */
+  background-color: var(--light-color); /* Use CSS variable */
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -187,20 +187,20 @@ code {
   justify-content: center;
   font-weight: 500;
   color: #495057;
-  background-color: #f8f9fa;
+  background-color: var(--light-color); /* Use CSS variable */
   border: 2px solid #dee2e6;
-  transition: all 0.3s ease;
+  transition: var(--transition); /* Use CSS variable */
 }
 
 .pagination .page-item .page-link:hover {
   background-color: #e9ecef;
   transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow); /* Use CSS variable */
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--primary-color); /* Use CSS variable */
+  border-color: var(--primary-color); /* Use CSS variable */
   color: white;
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
@@ -257,19 +257,19 @@ code {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+  transition: var(--transition); /* Use CSS variable */
   width: 160px;
 }
 
 .chart-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow); /* Use CSS variable */
 }
 
 .chart-selector-card {
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #f8f9fa;
+  box-shadow: var(--shadow); /* Use CSS variable */
+  background-color: var(--light-color); /* Use CSS variable */
 }
 
 .chart-wrapper {
@@ -336,7 +336,19 @@ code {
 
 .chart-title h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: var(--text-color); /* Use CSS variable */
   margin: 0;
   padding: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .chart-btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

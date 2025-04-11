@@ -1,20 +1,38 @@
 # Car CRUD Application
 
-This is a full-stack CRUD (Create, Read, Update, Delete) application for managing cars. It consists of a Flask backend API and a React frontend.
+A full-stack web application for managing car inventory and sales data visualization.
+
+## Project Overview
+
+This application provides a comprehensive solution for car inventory management with features including:
+
+- Create, read, update, and delete car records
+- Search and filter functionality
+- Pagination for efficient data browsing
+- Sales data visualization with interactive charts
+- Responsive design for desktop and mobile devices
 
 ## Project Structure
 
 ```bash
 crud-api-project/
 ├── app/                # Flask backend API
-│   ├── database/       # Database files
+│   ├── database/       # Database files (JSON)
 │   ├── models/         # Data models
-│   └── routes/         # API endpoints
+│   ├── routes/         # API endpoints
+│   └── scripts/        # Utility scripts
 ├── frontend/           # React frontend
 │   ├── public/         # Static files
 │   └── src/            # React source code
 │       ├── components/ # React components
-│       └── services/   # API services
+│       │   ├── cars/   # Car-related components
+│       │   ├── common/ # Reusable UI components
+│       │   ├── layout/ # Layout components
+│       │   ├── modals/ # Modal dialogs
+│       │   └── sales/  # Sales visualization components
+│       ├── hooks/      # Custom React hooks
+│       ├── services/   # API services
+│       └── utils/      # Utility functions
 ```
 
 ## Backend Setup

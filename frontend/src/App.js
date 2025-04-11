@@ -6,11 +6,11 @@ import {
   Link,
 } from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
-import CarList from "./components/CarList";
-import AddCar from "./components/AddCar";
-import EditCar from "./components/EditCar";
-import SalesDetails from "./components/SalesDetails";
-import SalesOverview from "./components/SalesOverview";
+import CarList from "./components/cars/CarList";
+import AddCar from "./components/cars/AddCar";
+import EditCar from "./components/cars/EditCar";
+import SalesDetails from "./components/modals/SalesDetails";
+import SalesOverview from "./components/sales/SalesOverview";
 import "./App.css";
 import { FaCar, FaPlus, FaChartBar } from "react-icons/fa";
 

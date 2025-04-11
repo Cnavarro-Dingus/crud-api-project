@@ -22,7 +22,7 @@ const ConfirmationModal = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [show, onHide, onConfirm]);
+  }, [show, onHide, onConfirm]); // Ensure dependencies are correct
 
   return (
     <Modal
@@ -31,9 +31,10 @@ const ConfirmationModal = ({
       centered
       backdrop="static"
       keyboard={false}
+      aria-labelledby="confirmation-modal-title" // Added ARIA label
     >
       <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
+        <Modal.Title id="confirmation-modal-title">{title}</Modal.Title> {/* Added ARIA label */}
       </Modal.Header>
       <Modal.Body>
         <p>{message}</p>

@@ -1,14 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 import { FaCarSide } from "react-icons/fa";
 
-const CarDetailsModal = ({ show, onHide, car }) => {
+const CarDetailsModal = memo(({ show, onHide, car }) => {
   if (!car) return null;
 
   return (
-    <Modal show={show} onHide={onHide} centered>
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      aria-labelledby="car-details-modal-title"
+    >
       <Modal.Header closeButton>
-        <Modal.Title className="d-flex align-items-center">
+        <Modal.Title id="car-details-modal-title" className="d-flex align-items-center">
           <FaCarSide className="me-2" />
           {car.make} {car.model} ({car.year})
         </Modal.Title>
@@ -32,6 +37,6 @@ const CarDetailsModal = ({ show, onHide, car }) => {
       </Modal.Footer>
     </Modal>
   );
-};
+});
 
 export default CarDetailsModal;

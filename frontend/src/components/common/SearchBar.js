@@ -7,6 +7,13 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
     setSearchTerm("");
   };
 
+  // Optional: Debounce input changes
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    // Add debounce logic here if needed
+  };
+
   return (
     <Form.Group controlId="searchModel" className="search-bar">
       <Form.Label>Search by Model</Form.Label>
@@ -18,7 +25,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
           type="text"
           placeholder="Enter model name"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleChange} // Updated to use handleChange
           aria-label="Search models"
         />
         {searchTerm && (
