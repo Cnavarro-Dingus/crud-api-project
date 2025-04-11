@@ -1,5 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import CarList from "./components/CarList";
 import AddCar from "./components/AddCar";
@@ -12,15 +18,15 @@ import { FaCar, FaPlus, FaChartBar, FaArrowLeft } from "react-icons/fa";
 // Back button component that uses the navigate hook
 const BackButton = () => {
   const navigate = useNavigate();
-  
+
   const goBack = () => {
     navigate(-1);
   };
-  
+
   return (
-    <Button 
-      variant="outline-light" 
-      size="sm" 
+    <Button
+      variant="outline-light"
+      size="sm"
       className="d-flex align-items-center me-3"
       onClick={goBack}
     >

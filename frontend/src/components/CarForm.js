@@ -42,7 +42,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     });
   };
 
-  // Validate form
+  // Enhanced validation
   const validateForm = () => {
     const newErrors = {};
     if (!car.make.trim()) {
@@ -53,9 +53,23 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     }
     if (!car.year) {
       newErrors.year = "Year is required";
+    } else {
+      const yearNum = parseInt(car.year);
+      const currentYear = new Date().getFullYear();
+      if (yearNum < 1900 || yearNum > currentYear + 1) {
+        newErrors.year = `Year must be between 1900 and ${currentYear + 1}`;
+      }
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle Enter key in feature input
+  const handleFeatureKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addFeature();
+    }
   };
 
   const handleFormSubmit = (e) => {
@@ -122,23 +136,27 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
                 type="text"
                 value={featureInput}
                 onChange={(e) => setFeatureInput(e.target.value)}
+                onKeyDown={handleFeatureKeyDown}
                 placeholder="Enter a feature (e.g., Bluetooth, Navigation)"
                 className="me-2"
                 maxLength="30"
                 isInvalid={!!errors.features}
+                aria-describedby="featureHelpBlock"
               />
               <Button
                 variant="outline-secondary"
                 onClick={addFeature}
                 type="button"
+                disabled={!featureInput.trim()}
               >
                 Add
               </Button>
             </div>
+            <Form.Text id="featureHelpBlock" muted>
+              Press Enter or click Add to add a feature
+            </Form.Text>
             {errors.features && (
-              <div className="invalid-feedback d-block">
-                {errors.features}
-              </div>
+              <div className="invalid-feedback d-block">{errors.features}</div>
             )}
 
             {car.features && car.features.length > 0 && (
@@ -166,20 +184,20 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
           </Form.Group>
 
           <div className="d-flex justify-content-between mt-4">
-            <Button 
-              variant="secondary" 
-              onClick={() => navigate ? navigate(-1) : window.history.back()}
+            <Button
+              variant="secondary"
+              onClick={() => (navigate ? navigate(-1) : window.history.back())}
               className="slide-in-right"
-              style={{animationDelay: '0.1s'}}
+              style={{ animationDelay: "0.1s" }}
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              variant="primary" 
+            <Button
+              type="submit"
+              variant="primary"
               disabled={loading}
               className="slide-in-right"
-              style={{animationDelay: '0.2s'}}
+              style={{ animationDelay: "0.2s" }}
             >
               {loading ? "Submitting..." : "Submit"}
             </Button>

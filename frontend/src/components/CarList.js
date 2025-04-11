@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import CarService from "../services/CarService";
 import SearchBar from "./SearchBar";
-import { FaChartBar, FaBackspace, FaPencilRuler} from "react-icons/fa";
+import { FaChartBar, FaBackspace, FaPencilRuler } from "react-icons/fa";
 import ConfirmationModal from "./ConfirmationModal";
 
 const CarList = () => {
@@ -44,7 +44,11 @@ const CarList = () => {
   const fetchCars = useCallback(async () => {
     try {
       setLoading(true);
-      const { cars, total_count } = await CarService.getAllCars(debouncedSearchTerm, currentPage, itemsPerPage);
+      const { cars, total_count } = await CarService.getAllCars(
+        debouncedSearchTerm,
+        currentPage,
+        itemsPerPage
+      );
       setCars(cars);
       setTotalCount(total_count); // Set total count
       setError(null);
@@ -66,7 +70,7 @@ const CarList = () => {
   const handlePageChange = (pageNumber) => {
     if (currentPage !== pageNumber) {
       setPageTransition(true);
-      
+
       // Add a slight delay before changing the page to allow animation to complete
       setTimeout(() => {
         setCurrentPage(pageNumber);
@@ -119,7 +123,12 @@ const CarList = () => {
       )}
 
       {error && (
-        <Alert variant="danger" onClose={() => setError(null)} dismissible className="slide-in">
+        <Alert
+          variant="danger"
+          onClose={() => setError(null)}
+          dismissible
+          className="slide-in"
+        >
           {error}
         </Alert>
       )}
@@ -136,17 +145,19 @@ const CarList = () => {
         </Alert>
       ) : (
         <>
-          <Row 
-            xs={1} 
-            md={2} 
-            className={`g-4 ${pageTransition ? 'page-transition-out' : 'page-transition-in'}`}
+          <Row
+            xs={1}
+            md={2}
+            className={`g-4 ${
+              pageTransition ? "page-transition-out" : "page-transition-in"
+            }`}
             ref={carListRef}
           >
             {cars.map((car, index) => (
               <Col key={car.id}>
-                <Card 
-                  className="h-100 d-flex flex-column" 
-                  style={{animationDelay: `${index * 0.1}s`}}
+                <Card
+                  className="h-100 d-flex flex-column"
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <Card.Body className="d-flex flex-column">
                     <Card.Title>
@@ -167,7 +178,7 @@ const CarList = () => {
                       to={`/edit/${car.id}`}
                       className="btn btn-primary btn-sm me-2 btn-action"
                     >
-                      <FaPencilRuler className="me-1" />  Edit
+                      <FaPencilRuler className="me-1" /> Edit
                     </Link>
                     <Button
                       variant="danger"
@@ -175,7 +186,7 @@ const CarList = () => {
                       className="btn-action"
                       onClick={() => handleDeleteClick(car.id)}
                     >
-                      <FaBackspace className="me-1" />  Delete
+                      <FaBackspace className="me-1" /> Delete
                     </Button>
                     <Link
                       to={`/sales/${car.model}/${car.year}`}
@@ -188,58 +199,77 @@ const CarList = () => {
               </Col>
             ))}
           </Row>
-          
+
           {/* Enhanced pagination */}
           <Pagination className="mt-4 justify-content-center pagination-container">
             {totalCount > itemsPerPage && (
               <>
-                <Pagination.First 
+                <Pagination.First
                   onClick={() => handlePageChange(1)}
                   disabled={currentPage === 1}
                 />
-                <Pagination.Prev 
+                <Pagination.Prev
                   onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
                 />
-                
-                {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map((number) => {
-                  // Show limited page numbers with ellipsis for better UX
-                  const pageNumber = number + 1;
-                  
-                  // Always show first page, last page, current page, and pages around current
-                  if (
-                    pageNumber === 1 || 
-                    pageNumber === Math.ceil(totalCount / itemsPerPage) ||
-                    (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
-                  ) {
-                    return (
-                      <Pagination.Item
-                        key={pageNumber}
-                        active={pageNumber === currentPage}
-                        onClick={() => handlePageChange(pageNumber)}
-                      >
-                        {pageNumber}
-                      </Pagination.Item>
-                    );
-                  } else if (
-                    (pageNumber === 2 && currentPage > 3) ||
-                    (pageNumber === Math.ceil(totalCount / itemsPerPage) - 1 && 
-                     currentPage < Math.ceil(totalCount / itemsPerPage) - 2)
-                  ) {
-                    // Add ellipsis
-                    return <Pagination.Ellipsis key={`ellipsis-${pageNumber}`} />;
+
+                {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map(
+                  (number) => {
+                    // Show limited page numbers with ellipsis for better UX
+                    const pageNumber = number + 1;
+
+                    // Always show first page, last page, current page, and pages around current
+                    if (
+                      pageNumber === 1 ||
+                      pageNumber === Math.ceil(totalCount / itemsPerPage) ||
+                      (pageNumber >= currentPage - 1 &&
+                        pageNumber <= currentPage + 1)
+                    ) {
+                      return (
+                        <Pagination.Item
+                          key={pageNumber}
+                          active={pageNumber === currentPage}
+                          onClick={() => handlePageChange(pageNumber)}
+                        >
+                          {pageNumber}
+                        </Pagination.Item>
+                      );
+                    } else if (
+                      (pageNumber === 2 && currentPage > 3) ||
+                      (pageNumber ===
+                        Math.ceil(totalCount / itemsPerPage) - 1 &&
+                        currentPage < Math.ceil(totalCount / itemsPerPage) - 2)
+                    ) {
+                      // Add ellipsis
+                      return (
+                        <Pagination.Ellipsis key={`ellipsis-${pageNumber}`} />
+                      );
+                    }
+
+                    return null;
                   }
-                  
-                  return null;
-                })}
-                
-                <Pagination.Next 
-                  onClick={() => handlePageChange(Math.min(Math.ceil(totalCount / itemsPerPage), currentPage + 1))}
-                  disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
+                )}
+
+                <Pagination.Next
+                  onClick={() =>
+                    handlePageChange(
+                      Math.min(
+                        Math.ceil(totalCount / itemsPerPage),
+                        currentPage + 1
+                      )
+                    )
+                  }
+                  disabled={
+                    currentPage === Math.ceil(totalCount / itemsPerPage)
+                  }
                 />
-                <Pagination.Last 
-                  onClick={() => handlePageChange(Math.ceil(totalCount / itemsPerPage))}
-                  disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
+                <Pagination.Last
+                  onClick={() =>
+                    handlePageChange(Math.ceil(totalCount / itemsPerPage))
+                  }
+                  disabled={
+                    currentPage === Math.ceil(totalCount / itemsPerPage)
+                  }
                 />
               </>
             )}

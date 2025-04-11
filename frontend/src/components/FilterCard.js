@@ -2,19 +2,19 @@ import React from "react";
 import { Card, Form, Row, Col } from "react-bootstrap";
 import { FaFilter } from "react-icons/fa";
 
-const FilterCard = ({ 
-  selectedYear, 
-  setSelectedYear, 
-  selectedContinent, 
-  setSelectedContinent, 
-  selectedMake, 
+const FilterCard = ({
+  selectedYear,
+  setSelectedYear,
+  selectedContinent,
+  setSelectedContinent,
+  selectedMake,
   setSelectedMake,
   availableYears,
   availableMakes,
   continents,
   activeChart,
   topModelsCount,
-  setTopModelsCount
+  setTopModelsCount,
 }) => {
   return (
     <Card className="mb-4 filter-card">
@@ -26,13 +26,15 @@ const FilterCard = ({
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Year</Form.Label>
-              <Form.Select 
-                value={selectedYear} 
+              <Form.Select
+                value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
               >
                 <option value="all">All Years</option>
-                {availableYears.map(year => (
-                  <option key={year} value={year}>{year}</option>
+                {availableYears.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
                 ))}
               </Form.Select>
             </Form.Group>
@@ -40,13 +42,15 @@ const FilterCard = ({
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Continent</Form.Label>
-              <Form.Select 
-                value={selectedContinent} 
+              <Form.Select
+                value={selectedContinent}
                 onChange={(e) => setSelectedContinent(e.target.value)}
               >
                 <option value="all">All Continents</option>
-                {continents.map(continent => (
-                  <option key={continent} value={continent}>{continent}</option>
+                {continents.map((continent) => (
+                  <option key={continent} value={continent}>
+                    {continent}
+                  </option>
                 ))}
               </Form.Select>
             </Form.Group>
@@ -54,13 +58,15 @@ const FilterCard = ({
           <Col md={4}>
             <Form.Group className="mb-3">
               <Form.Label>Make</Form.Label>
-              <Form.Select 
-                value={selectedMake} 
+              <Form.Select
+                value={selectedMake}
                 onChange={(e) => setSelectedMake(e.target.value)}
               >
                 <option value="all">All Makes</option>
-                {availableMakes.map(make => (
-                  <option key={make} value={make}>{make}</option>
+                {availableMakes.map((make) => (
+                  <option key={make} value={make}>
+                    {make}
+                  </option>
                 ))}
               </Form.Select>
             </Form.Group>
@@ -71,8 +77,8 @@ const FilterCard = ({
             <Col md={4}>
               <Form.Group className="mb-3">
                 <Form.Label>Show Top Models</Form.Label>
-                <Form.Select 
-                  value={topModelsCount} 
+                <Form.Select
+                  value={topModelsCount}
                   onChange={(e) => setTopModelsCount(parseInt(e.target.value))}
                 >
                   <option value="10">Top 10</option>

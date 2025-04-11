@@ -39,11 +39,21 @@ const AddCar = () => {
     <div className="fade-in">
       <h2 className="page-title">Add New Car</h2>
       {error && (
-        <Alert variant="danger" onClose={() => setError(null)} dismissible className="form-error slide-in">
+        <Alert
+          variant="danger"
+          onClose={() => setError(null)}
+          dismissible
+          className="form-error slide-in"
+        >
           {error}
         </Alert>
       )}
-      <CarForm initialCar={initialCar} onSubmit={handleSubmit} error={error} loading={loading} />
+      <CarForm
+        initialCar={initialCar}
+        onSubmit={handleSubmit}
+        error={error}
+        loading={loading}
+      />
     </div>
   );
 };

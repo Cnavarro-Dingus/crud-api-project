@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
+import { Spinner, Alert, Card } from "react-bootstrap";
+import { FaArrowLeft } from "react-icons/fa";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -60,26 +62,72 @@ const SalesDetails = () => {
     ],
   };
 
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Units Sold",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Country",
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: `Sales Distribution for ${model} ${year ? `(${year})` : ""}`,
+      },
+    },
+  };
+
   return (
     <div className="fade-in">
-      <h2 className="page-title">
-        Sales Details for {model} {year ? `(${year})` : ""}
-      </h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="page-title">
+          Sales Details for {model} {year ? `(${year})` : ""}
+        </h2>
+        <Link to="/" className="btn btn-outline-primary">
+          <FaArrowLeft className="me-2" /> Back to Cars
+        </Link>
+      </div>
+
       {loading ? (
-        <div className="text-center">
-          <p className="pulse">Loading...</p>
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status" variant="primary" />
+          <p className="mt-3">Loading sales data...</p>
         </div>
       ) : error ? (
-        <p className="slide-in text-danger">{error}</p>
+        <Alert variant="danger" className="slide-in">
+          <Alert.Heading>Error Loading Data</Alert.Heading>
+          <p>{error}</p>
+        </Alert>
       ) : salesData.length === 0 ? (
-        <p className="slide-in">
-          No sales data available for this model
-          {year ? ` and year ${year}` : ""}.
-        </p>
+        <Alert variant="info" className="slide-in">
+          <Alert.Heading>No Data Available</Alert.Heading>
+          <p>
+            No sales data available for this model
+            {year ? ` and year ${year}` : ""}.
+          </p>
+        </Alert>
       ) : (
-        <div className="slide-in">
-          <Bar data={chartData} />
-        </div>
+        <Card className="slide-in">
+          <Card.Body>
+            <div style={{ height: "400px" }}>
+              <Bar data={chartData} options={chartOptions} />
+            </div>
+          </Card.Body>
+        </Card>
       )}
     </div>
   );
