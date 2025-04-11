@@ -16,6 +16,7 @@ import ConfirmationModal from "./ConfirmationModal";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
+  const [totalCount, setTotalCount] = useState(0); // New state for total count
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleteMessage, setDeleteMessage] = useState("");
@@ -41,10 +42,9 @@ const CarList = () => {
   const fetchCars = useCallback(async () => {
     try {
       setLoading(true);
-      const data = debouncedSearchTerm
-        ? await CarService.getCarsByModel(debouncedSearchTerm)
-        : await CarService.getAllCars();
-      setCars(data);
+      const { cars, total_count } = await CarService.getAllCars(debouncedSearchTerm, currentPage, itemsPerPage);
+      setCars(cars);
+      setTotalCount(total_count); // Set total count
       setError(null);
     } catch (err) {
       setError("Failed to fetch cars. Please try again later.");
@@ -52,17 +52,12 @@ const CarList = () => {
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, currentPage, itemsPerPage]);
 
   // Fetch cars based on debounced search term
   useEffect(() => {
     fetchCars();
   }, [fetchCars]);
-
-  // Calculate the cars to display on the current page
-  const indexOfLastCar = currentPage * itemsPerPage;
-  const indexOfFirstCar = indexOfLastCar - itemsPerPage;
-  const currentCars = cars.slice(indexOfFirstCar, indexOfLastCar);
 
   // Handle page change
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
@@ -121,14 +116,14 @@ const CarList = () => {
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
-      ) : currentCars.length === 0 ? (
+      ) : cars.length === 0 ? (
         <Alert variant="info">
           No cars found. Click "Add New Car" to create one.
         </Alert>
       ) : (
         <>
           <Row xs={1} md={2} className="g-4">
-            {currentCars.map((car) => (
+            {cars.map((car) => (
               <Col key={car.id}>
                 <Card className="h-100 d-flex flex-column">
                   <Card.Body className="d-flex flex-column">
@@ -172,7 +167,7 @@ const CarList = () => {
             ))}
           </Row>
           <Pagination className="mt-4 justify-content-center">
-            {[...Array(Math.ceil(cars.length / itemsPerPage)).keys()].map(
+            {[...Array(Math.ceil(totalCount / itemsPerPage)).keys()].map(
               (number) => (
                 <Pagination.Item
                   key={number + 1}

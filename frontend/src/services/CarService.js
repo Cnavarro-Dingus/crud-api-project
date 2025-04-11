@@ -19,9 +19,8 @@ class CarService {
     }
   }
 
-  // Car methods
-  static getAllCars() {
-    return this.apiRequest("get", "/cars");
+  static getAllCars(model = '', page = 1, limit = 6) {
+    return this.apiRequest("get", `/cars?model=${model}&page=${page}&limit=${limit}`);
   }
 
   static getCarById(id) {
