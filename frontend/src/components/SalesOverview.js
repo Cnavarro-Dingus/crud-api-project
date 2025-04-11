@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,9 +9,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Nav, Button, Card, Form, Row, Col } from "react-bootstrap";
+import { Nav, Button, Card, Spinner, Alert } from "react-bootstrap";
 import CarService from "../services/CarService";
-import { FaCalendarAlt, FaMapMarkedAlt, FaCarSide, FaFilter } from "react-icons/fa";
+import { FaCalendarAlt, FaMapMarkedAlt, FaCarSide, FaDownload } from "react-icons/fa";
+import FilterCard from "./FilterCard";
+import { getContinentFromCountry } from "../utils/countryMapping";
 
 ChartJS.register(
   CategoryScale,
@@ -22,25 +24,6 @@ ChartJS.register(
   Legend
 );
 
-// Map countries to continents for filtering
-const countryContinentMap = {
-  "United States": "North America", "Canada": "North America", "Mexico": "North America",
-  "Brazil": "South America", "Argentina": "South America", "Chile": "South America", 
-  "Colombia": "South America", "Peru": "South America", "Venezuela": "South America",
-  "United Kingdom": "Europe", "Germany": "Europe", "France": "Europe", "Italy": "Europe", 
-  "Spain": "Europe", "Netherlands": "Europe", "Switzerland": "Europe", "Sweden": "Europe", 
-  "Belgium": "Europe", "Austria": "Europe", "Poland": "Europe", "Portugal": "Europe", 
-  "Greece": "Europe", "Denmark": "Europe", "Norway": "Europe", "Finland": "Europe", 
-  "Czech Republic": "Europe", "Hungary": "Europe", "Romania": "Europe", "Ukraine": "Europe", 
-  "Ireland": "Europe",
-  "China": "Asia", "Japan": "Asia", "South Korea": "Asia", "India": "Asia", "Russia": "Asia", 
-  "Thailand": "Asia", "Malaysia": "Asia", "Indonesia": "Asia", "Singapore": "Asia", 
-  "Philippines": "Asia", "Vietnam": "Asia", "Israel": "Asia", "Qatar": "Asia", 
-  "Saudi Arabia": "Asia", "United Arab Emirates": "Asia",
-  "Australia": "Oceania", "New Zealand": "Oceania",
-  "South Africa": "Africa", "Egypt": "Africa", "Morocco": "Africa", "Nigeria": "Africa", "Kenya": "Africa"
-};
-
 const SalesOverview = () => {
   const [allSalesData, setAllSalesData] = useState([]);
   const [annualSalesData, setAnnualSalesData] = useState([]);
@@ -49,6 +32,7 @@ const SalesOverview = () => {
   const [loading, setLoading] = useState(true);
   const [activeChart, setActiveChart] = useState("annual");
   const [animating, setAnimating] = useState(false);
+  const [error, setError] = useState(null);
   
   // Filters
   const [selectedYear, setSelectedYear] = useState("all");
@@ -59,10 +43,82 @@ const SalesOverview = () => {
   const [continents, setContinents] = useState([]);
   const [topModelsCount, setTopModelsCount] = useState(20);
 
+  // Wrap processData in useCallback to prevent unnecessary recreations
+  const processData = useCallback((sales) => {
+    // Use reduce for better performance
+    const { annualSales, countrySales, modelSales } = sales.reduce(
+      (acc, sale) => {
+        // Annual sales
+        acc.annualSales[sale.sale_year] = 
+          (acc.annualSales[sale.sale_year] || 0) + sale.units_sold;
+    
+        // Country sales
+        acc.countrySales[sale.country] = 
+          (acc.countrySales[sale.country] || 0) + sale.units_sold;
+    
+        // Model sales with release year
+        const modelKey = `${sale.make} ${sale.model}`;
+        if (!acc.modelSales[modelKey]) {
+          acc.modelSales[modelKey] = {};
+        }
+        const yearKey = sale.release_year.toString();
+        acc.modelSales[modelKey][yearKey] = 
+          (acc.modelSales[modelKey][yearKey] || 0) + sale.units_sold;
+    
+        return acc;
+      },
+      { annualSales: {}, countrySales: {}, modelSales: {} }
+    );
+    
+    // Sort annual sales by year
+    setAnnualSalesData(
+      Object.entries(annualSales).sort((a, b) => a[0] - b[0])
+    );
+    
+    // Sort country sales from least to most
+    setCountrySalesData(
+      Object.entries(countrySales).sort((a, b) => a[1] - b[1])
+    );
+    
+    // Process model sales data more efficiently
+    const processedModelSales = [];
+    
+    Object.entries(modelSales).forEach(([model, yearData]) => {
+      // Calculate total units once
+      const totalUnits = Object.values(yearData).reduce((sum, units) => sum + units, 0);
+      
+      Object.entries(yearData)
+        .sort((a, b) => a[0] - b[0])
+        .forEach(([year, units]) => {
+          processedModelSales.push([
+            `${model} (${year})`,
+            units,
+            model,
+            parseInt(year),
+            totalUnits
+          ]);
+        });
+    });
+    
+    // Sort and limit model sales
+    setModelSalesData(
+      processedModelSales
+        .sort((a, b) => b[4] - a[4])
+        .slice(0, topModelsCount)
+    );
+  }, [topModelsCount]); // Add topModelsCount as a dependency
+
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
+        setLoading(true);
         const sales = await CarService.getAllSales();
+        
+        if (!sales || sales.length === 0) {
+          setError("No sales data available. Please check your database.");
+          return;
+        }
+        
         setAllSalesData(sales);
         
         // Extract unique years, makes, and continents for filters
@@ -71,7 +127,7 @@ const SalesOverview = () => {
         const continentSet = new Set();
         
         sales.forEach(sale => {
-          const continent = countryContinentMap[sale.country] || "Other";
+          const continent = getContinentFromCountry(sale.country);
           continentSet.add(continent);
         });
         
@@ -81,15 +137,17 @@ const SalesOverview = () => {
         
         // Process the data initially
         processData(sales);
+        setError(null);
       } catch (error) {
         console.error("Error fetching sales data:", error);
+        setError("Failed to load sales data. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchSalesData();
-  }, []);
+  }, [processData]); // Add processData as a dependency
 
   // Process data whenever filters change
   useEffect(() => {
@@ -104,8 +162,7 @@ const SalesOverview = () => {
       // Apply continent filter if not "all"
       if (selectedContinent !== "all") {
         filteredData = filteredData.filter(sale => {
-          const continent = countryContinentMap[sale.country] || "Other";
-          return continent === selectedContinent;
+          return getContinentFromCountry(sale.country) === selectedContinent;
         });
       }
       
@@ -116,96 +173,56 @@ const SalesOverview = () => {
       
       processData(filteredData);
     }
-  }, [allSalesData, selectedYear, selectedContinent, selectedMake, topModelsCount]);
+  }, [allSalesData, selectedYear, selectedContinent, selectedMake, processData]); // Add processData as a dependency
 
-  const processData = (sales) => {
-    // Process annual sales data
-    const annualSales = {};
-    const countrySales = {};
-    const modelSales = {};
-
-    sales.forEach((sale) => {
-      // Annual sales
-      annualSales[sale.sale_year] =
-        (annualSales[sale.sale_year] || 0) + sale.units_sold;
-
-      // Country sales
-      countrySales[sale.country] =
-        (countrySales[sale.country] || 0) + sale.units_sold;
-
-      // Model sales with release year
-      const modelKey = `${sale.make} ${sale.model}`;
-      if (!modelSales[modelKey]) {
-        modelSales[modelKey] = {};
-      }
-      const yearKey = sale.release_year.toString();
-      modelSales[modelKey][yearKey] =
-        (modelSales[modelKey][yearKey] || 0) + sale.units_sold;
-    });
-
-    setAnnualSalesData(
-      Object.entries(annualSales).sort((a, b) => a[0] - b[0])
-    );
-
-    // Sort country sales from least to most
-    setCountrySalesData(
-      Object.entries(countrySales).sort((a, b) => a[1] - b[1])
-    );
-
-    // Process model sales data to group by model and sort by year
-    const processedModelSales = [];
-    Object.entries(modelSales).forEach(([model, yearData]) => {
-      // Calculate total units for this model across all years
-      let totalUnits = 0;
-      Object.values(yearData).forEach(units => {
-        totalUnits += units;
-      });
-      
-      Object.entries(yearData)
-        .sort((a, b) => a[0] - b[0])
-        .forEach(([year, units]) => {
-          processedModelSales.push([
-            `${model} (${year})`,
-            units,
-            model,
-            parseInt(year),
-            totalUnits // Store total units for sorting
-          ]);
-        });
-    });
-
-    // Sort by total units sold (descending) and limit to top N models
-    const sortedModelSales = processedModelSales
-      .sort((a, b) => b[4] - a[4]) // Sort by total units (descending)
-      .slice(0, topModelsCount); // Take only top N models
-    
-    setModelSalesData(sortedModelSales);
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          autoSkip: false,
-          maxRotation: 90,
-          minRotation: 0,
+  const getChartOptions = (chartType) => {
+    const baseOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 90,
+            minRotation: 0,
+          },
         },
       },
-    },
-    plugins: {
-      legend: {
-        position: "top",
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeInOutQuart'
+        }
       },
-      title: {
-        display: true,
-      },
-      animation: {
-        duration: 1000,
-        easing: 'easeInOutQuart'
-      }
-    },
+    };
+
+    // Add chart-specific options
+    if (chartType === "model") {
+      return {
+        ...baseOptions,
+        scales: {
+          ...baseOptions.scales,
+          x: {
+            ...baseOptions.scales.x,
+            ticks: {
+              ...baseOptions.scales.x.ticks,
+              callback: function(value, index) {
+                const label = this.getLabelForValue(value);
+                return label.length > 15 ? label.substr(0, 15) + '...' : label;
+              }
+            }
+          }
+        }
+      };
+    }
+    
+    return baseOptions;
   };
 
   const handleChartChange = (chartType) => {
@@ -220,166 +237,139 @@ const SalesOverview = () => {
     }
   };
 
+  // Function to export chart data
+  const exportChartData = () => {
+    let dataToExport;
+    let filename;
+    
+    switch (activeChart) {
+      case "annual":
+        dataToExport = annualSalesData.map(([year, units]) => ({ Year: year, "Units Sold": units }));
+        filename = "annual_sales_data.csv";
+        break;
+      case "country":
+        dataToExport = countrySalesData.map(([country, units]) => ({ Country: country, "Units Sold": units }));
+        filename = "country_sales_data.csv";
+        break;
+      case "model":
+        dataToExport = modelSalesData.map(([label, units]) => ({ Model: label, "Units Sold": units }));
+        filename = "model_sales_data.csv";
+        break;
+      default:
+        return;
+    }
+    
+    // Convert to CSV
+    const headers = Object.keys(dataToExport[0]);
+    const csvContent = [
+      headers.join(','),
+      ...dataToExport.map(row => headers.map(header => row[header]).join(','))
+    ].join('\n');
+    
+    // Create download link
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const renderFilters = () => {
     return (
-      <Card className="mb-4 filter-card">
-        <Card.Body>
-          <Card.Title>
-            <FaFilter className="me-2" /> Filter Options
-          </Card.Title>
-          <Row className="mt-3">
-            <Col md={4}>
-              <Form.Group className="mb-3">
-                <Form.Label>Year</Form.Label>
-                <Form.Select 
-                  value={selectedYear} 
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                >
-                  <option value="all">All Years</option>
-                  {availableYears.map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group className="mb-3">
-                <Form.Label>Continent</Form.Label>
-                <Form.Select 
-                  value={selectedContinent} 
-                  onChange={(e) => setSelectedContinent(e.target.value)}
-                >
-                  <option value="all">All Continents</option>
-                  {continents.map(continent => (
-                    <option key={continent} value={continent}>{continent}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-            <Col md={4}>
-              <Form.Group className="mb-3">
-                <Form.Label>Make</Form.Label>
-                <Form.Select 
-                  value={selectedMake} 
-                  onChange={(e) => setSelectedMake(e.target.value)}
-                >
-                  <option value="all">All Makes</option>
-                  {availableMakes.map(make => (
-                    <option key={make} value={make}>{make}</option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
-          {activeChart === "model" && (
-            <Row>
-              <Col md={4}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Show Top Models</Form.Label>
-                  <Form.Select 
-                    value={topModelsCount} 
-                    onChange={(e) => setTopModelsCount(parseInt(e.target.value))}
-                  >
-                    <option value="10">Top 10</option>
-                    <option value="20">Top 20</option>
-                    <option value="50">Top 50</option>
-                    <option value="100">Top 100</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
-          )}
-        </Card.Body>
-      </Card>
+      <FilterCard
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedContinent={selectedContinent}
+        setSelectedContinent={setSelectedContinent}
+        selectedMake={selectedMake}
+        setSelectedMake={setSelectedMake}
+        availableYears={availableYears}
+        availableMakes={availableMakes}
+        continents={continents}
+        activeChart={activeChart}
+        topModelsCount={topModelsCount}
+        setTopModelsCount={setTopModelsCount}
+      />
     );
   };
 
+  // Update the renderChart function to show a better loading state
   const renderChart = () => {
     if (loading) {
-      return <p className="text-center pulse">Loading sales data...</p>;
+      return (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status" variant="primary" />
+          <p className="mt-3">Loading sales data...</p>
+        </div>
+      );
+    }
+  
+    if (error) {
+      return (
+        <Alert variant="danger">
+          {error}
+        </Alert>
+      );
     }
 
     const chartClasses = `chart-container ${animating ? 'chart-exit' : 'chart-enter'}`;
 
-    switch (activeChart) {
-      case "annual":
-        return (
-          <div className={chartClasses}>
-            <Bar
-              data={{
-                labels: annualSalesData.map(([year]) => year),
-                datasets: [
-                  {
-                    label: "Total Units Sold",
-                    data: annualSalesData.map(([, units]) => units),
-                    backgroundColor: "rgba(54, 162, 235, 0.6)",
-                  },
-                ],
-              }}
-              options={chartOptions}
-            />
-          </div>
-        );
-      case "country":
-        return (
-          <div className={chartClasses}>
-            <Bar
-              data={{
-                labels: countrySalesData.map(([country]) => country),
-                datasets: [
-                  {
-                    label: "Total Units Sold",
-                    data: countrySalesData.map(([, units]) => units),
-                    backgroundColor: "rgba(255, 99, 132, 0.6)",
-                  },
-                ],
-              }}
-              options={chartOptions}
-            />
-          </div>
-        );
-      case "model":
-        return (
-          <div className={chartClasses}>
-            <Bar
-              data={{
-                labels: modelSalesData.map(([label]) => label),
-                datasets: [
-                  {
-                    label: "Total Units Sold",
-                    data: modelSalesData.map(([, units]) => units),
-                    backgroundColor: "rgba(75, 192, 192, 0.6)",
-                  },
-                ],
-              }}
-              options={{
-                ...chartOptions,
-                scales: {
-                  ...chartOptions.scales,
-                  x: {
-                    ...chartOptions.scales.x,
-                    ticks: {
-                      ...chartOptions.scales.x.ticks,
-                      callback: function(value, index) {
-                        // Shorten the labels for better display
-                        const label = this.getLabelForValue(value);
-                        return label.length > 15 ? label.substr(0, 15) + '...' : label;
-                      }
-                    }
-                  }
-                }
-              }}
-            />
-          </div>
-        );
-      default:
-        return null;
-    }
+    const chartConfigs = {
+      annual: {
+        labels: annualSalesData.map(([year]) => year),
+        datasets: [{
+          label: "Total Units Sold",
+          data: annualSalesData.map(([, units]) => units),
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+        }],
+        options: getChartOptions("annual")
+      },
+      country: {
+        labels: countrySalesData.map(([country]) => country),
+        datasets: [{
+          label: "Total Units Sold",
+          data: countrySalesData.map(([, units]) => units),
+          backgroundColor: "rgba(255, 99, 132, 0.6)",
+        }],
+        options: getChartOptions("country")
+      },
+      model: {
+        labels: modelSalesData.map(([label]) => label),
+        datasets: [{
+          label: "Total Units Sold",
+          data: modelSalesData.map(([, units]) => units),
+          backgroundColor: "rgba(75, 192, 192, 0.6)",
+        }],
+        options: getChartOptions("model")
+      }
+    };
+
+    const config = chartConfigs[activeChart];
+    if (!config) return null;
+
+    return (
+      <div className={chartClasses}>
+        <Bar data={{
+          labels: config.labels,
+          datasets: config.datasets
+        }} options={config.options} />
+      </div>
+    );
   };
 
   return (
     <div className="fade-in">
       <h2 className="page-title">Sales Overview</h2>
+      
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
+      )}
       
       <Card className="mb-4 chart-selector-card">
         <Card.Body>
@@ -419,20 +409,30 @@ const SalesOverview = () => {
 
       <Card>
         <Card.Body>
-          <div className="chart-title">
-            {activeChart === "annual" && <h3>Total Annual Sales</h3>}
-            {activeChart === "country" && <h3>Sales Per Country</h3>}
-            {activeChart === "model" && <h3>Sales Per Model</h3>}
+          <div className="chart-title d-flex justify-content-between align-items-center">
+            <div>
+              {activeChart === "annual" && <h3>Total Annual Sales</h3>}
+              {activeChart === "country" && <h3>Sales Per Country</h3>}
+              {activeChart === "model" && <h3>Sales Per Model</h3>}
+              
+              <p className="filter-summary">
+                {selectedYear !== "all" && `Year: ${selectedYear} | `}
+                {selectedContinent !== "all" && `Continent: ${selectedContinent} | `}
+                {selectedMake !== "all" && `Make: ${selectedMake} | `}
+                {activeChart === "model" && `Showing top ${topModelsCount} models`}
+                {selectedYear === "all" && selectedContinent === "all" && selectedMake === "all" && 
+                activeChart !== "model" && "Showing all data"}
+              </p>
+            </div>
             
-            {/* Show filter summary */}
-            <p className="filter-summary">
-              {selectedYear !== "all" && `Year: ${selectedYear} | `}
-              {selectedContinent !== "all" && `Continent: ${selectedContinent} | `}
-              {selectedMake !== "all" && `Make: ${selectedMake} | `}
-              {activeChart === "model" && `Showing top ${topModelsCount} models`}
-              {selectedYear === "all" && selectedContinent === "all" && selectedMake === "all" && 
-               activeChart !== "model" && "Showing all data"}
-            </p>
+            <Button 
+              variant="outline-secondary" 
+              size="sm" 
+              onClick={exportChartData}
+              disabled={loading || error}
+            >
+              <FaDownload className="me-1" /> Export Data
+            </Button>
           </div>
           <div className="chart-wrapper">
             {renderChart()}
