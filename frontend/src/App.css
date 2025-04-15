@@ -323,3 +323,33 @@ body {
     margin-bottom: 10px;
   }
 }
+
+.user-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  color: white;
+  padding: 6px;
+}
+
+.dropdown-toggle::after {
+  margin-left: 0.5em;
+}
+
+
+.favorite-star {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.star-favorite {
+  color: yellow;
+}

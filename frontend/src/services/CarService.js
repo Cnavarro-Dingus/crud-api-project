@@ -1,6 +1,7 @@
 import axios from "axios";
+import AuthService from "./AuthService";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000"; // Use environment variable
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 // Simple cache implementation
 const cache = {
@@ -30,11 +31,20 @@ const cache = {
   },
 };
 
+// Helper function to get auth header
+const getAuthHeader = () => {
+  return AuthService.getAuthHeader();
+};
+
 class CarService {
   // Helper method to handle API requests
   static async apiRequest(method, url, data = null, useCache = false) {
     const cacheKey = `${method}-${url}-${JSON.stringify(data)}`;
-
+    const headers = {
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    };
+    
     // Return cached data if available and requested
     if (useCache && method.toLowerCase() === "get") {
       const cachedData = cache.get(cacheKey);
@@ -48,9 +58,7 @@ class CarService {
         method,
         url: `${API_URL}${url}`,
         data,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers  // Use the headers object we created earlier
       };
       const response = await axios(config);
 

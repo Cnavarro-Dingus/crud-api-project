@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -10,11 +10,12 @@ import {
 } from "react-bootstrap";
 import CarService from "../../services/CarService";
 import SearchBar from "../common/SearchBar";
-import { FaChartBar, FaBackspace, FaPencilRuler, FaInfoCircle } from "react-icons/fa";
+import { FaChartBar, FaBackspace, FaPencilRuler, FaInfoCircle, FaStar } from "react-icons/fa";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import CarDetailsModal from "../modals/CarDetailsModal";
-import { useDebounce } from "../../hooks/useDebounce"; // Import custom hook
-import PaginationComponent from "../common/PaginationComponent"; // Import pagination component
+import { useDebounce } from "../../hooks/useDebounce";
+import PaginationComponent from "../common/PaginationComponent";
+import FavoriteService from "../../services/FavoriteService";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -23,17 +24,35 @@ const CarList = () => {
   const [error, setError] = useState(null);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Use custom hook
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [showModal, setShowModal] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
   const [pageTransition, setPageTransition] = useState(false);
-  const carListRef = useRef(null);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [favorites, setFavorites] = useState({});
 
-  // Function to fetch cars
+  // Load favorites when component mounts
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const userFavorites = await FavoriteService.getFavorites();
+        const favoritesMap = {};
+        userFavorites.forEach(car => {
+          favoritesMap[car.id] = true;
+        });
+        setFavorites(favoritesMap);
+      } catch (error) {
+        console.error('Error loading favorites:', error);
+      }
+    };
+    
+    loadFavorites();
+  }, []);
+
+  // Function to fetch cars - memoized with useCallback
   const fetchCars = useCallback(async () => {
     try {
       setLoading(true);
@@ -101,6 +120,28 @@ const CarList = () => {
     setShowDetailsModal(true);
   };
 
+  // Find the toggleFavorite function in your CarList.js and update it:
+
+  const toggleFavorite = (car) => {
+    // Only proceed if we're not already processing this car
+    if (!FavoriteService.isPending(car.id)) {
+      // Optimistic update - immediately update the UI
+      setFavorites(prev => ({
+        ...prev,
+        [car.id]: !prev[car.id]
+      }));
+      
+      // Then perform the actual server operation
+      FavoriteService.toggleFavorite(car, (newState) => {
+        // This callback will be called if there's an error and we need to revert
+        setFavorites(prev => ({
+          ...prev,
+          [car.id]: newState
+        }));
+      });
+    }
+  };
+
   return (
     <div className="fade-in">
       <h2 className="page-title">Car List</h2>
@@ -149,7 +190,6 @@ const CarList = () => {
             className={`g-4 ${
               pageTransition ? "page-transition-out" : "page-transition-in"
             }`}
-            ref={carListRef}
           >
             {cars.map((car, index) => (
               <Col key={car.id}>
@@ -160,6 +200,10 @@ const CarList = () => {
                   <Card.Body className="d-flex flex-column">
                     <Card.Title>
                       {car.make} {car.model}
+                      <FaStar
+                        className={`favorite-star ${favorites[car.id] ? "star-favorite" : "star"}`}
+                        onClick={() => toggleFavorite(car)}
+                      />
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                       Year: {car.year}

@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import json
 import os
+from auth import auth  # Import auth from the auth module
 
 sales_bp = Blueprint('sales', __name__)
 
@@ -13,6 +14,7 @@ def read_sales_db():
         return json.load(f)
 
 @sales_bp.route('/sales', methods=['GET'])
+@auth.login_required  # Add authentication requirement
 def get_sales():
     country = request.args.get('country')
     model = request.args.get('model')

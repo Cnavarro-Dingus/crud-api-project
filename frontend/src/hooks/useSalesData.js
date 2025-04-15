@@ -43,7 +43,8 @@ export const useSalesData = (topModelsCount) => {
 
         setAllSalesData(sales);
 
-        const years = [...new Set(sales.map((sale) => sale.sale_year))].sort();
+        // Convert years to strings when creating the array
+        const years = [...new Set(sales.map((sale) => String(sale.sale_year)))].sort();
         const makes = [...new Set(sales.map((sale) => sale.make))].sort();
         const continentSet = new Set();
 
@@ -77,7 +78,7 @@ export const useSalesData = (topModelsCount) => {
       // Apply year filter if not "all"
       if (selectedYear !== "all") {
         filteredData = filteredData.filter(
-          (sale) => sale.sale_year === parseInt(selectedYear)
+          (sale) => String(sale.sale_year) === selectedYear
         );
       }
 

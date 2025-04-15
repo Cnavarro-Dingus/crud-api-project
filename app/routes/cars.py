@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 import json
 import os
 import re
+from auth import auth  # Import auth from the auth module
 
 cars_bp = Blueprint('cars', __name__)
 
@@ -50,6 +51,7 @@ def validate_car_data(car_data, cars):
     return None
 
 @cars_bp.route('/cars', methods=['GET'])
+@auth.login_required
 def get_cars():
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 6))
@@ -72,6 +74,7 @@ def get_cars():
     return jsonify({'cars': paginated_cars, 'total_count': total_count}), 200
 
 @cars_bp.route('/cars', methods=['POST'])
+@auth.login_required
 def create_car():
     new_car = request.json
     cars = read_db()
@@ -89,6 +92,7 @@ def create_car():
     return jsonify(new_car), 201
 
 @cars_bp.route('/cars/<int:car_id>', methods=['GET'])
+@auth.login_required
 def get_car_by_id(car_id):
     cars = read_db()
     car = next((car for car in cars if car['id'] == car_id), None)
@@ -97,6 +101,7 @@ def get_car_by_id(car_id):
     return jsonify({'error': 'Car not found'}), 404
 
 @cars_bp.route('/cars/<int:car_id>', methods=['PUT'])
+@auth.login_required
 def update_car(car_id):
     updated_car = request.json
     cars = read_db()
@@ -120,6 +125,7 @@ def update_car(car_id):
     return jsonify(updated_car), 200
 
 @cars_bp.route('/cars/<int:car_id>', methods=['DELETE'])
+@auth.login_required
 def delete_car(car_id):
     cars = read_db()
     car_to_delete = next((car for car in cars if car['id'] == car_id), None)
