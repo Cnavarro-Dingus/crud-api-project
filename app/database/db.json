@@ -1,25 +1,5 @@
 [
     {
-        "id": 2,
-        "make": "Mercedes-Benz",
-        "model": "GLC",
-        "year": 2016,
-        "features": [
-            "Panoramic Roof",
-            "Luxury Package",
-            "Convenience Package"
-        ]
-    },
-    {
-        "id": 3,
-        "make": "Lincoln",
-        "model": "Navigator",
-        "year": 2020,
-        "features": [
-            "Third Row Seating"
-        ]
-    },
-    {
         "id": 4,
         "make": "Ferrari",
         "model": "Portofino",

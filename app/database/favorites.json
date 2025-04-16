@@ -1,1 +1,30 @@
-{}
+{
+  "cristian": [
+    {
+      "features": [
+        "Panoramic Roof",
+        "Luxury Package",
+        "Convenience Package"
+      ],
+      "id": 2,
+      "make": "Mercedes-Benz",
+      "model": "GLC",
+      "year": 2016
+    }
+  ],
+  "cris": [
+    {
+      "features": [
+        "Heated Seats",
+        "Safety Package",
+        "Luxury Package",
+        "Lane Departure Warning",
+        "Convenience Package"
+      ],
+      "id": 4,
+      "make": "Ferrari",
+      "model": "Portofino",
+      "year": 1997
+    }
+  ]
+}

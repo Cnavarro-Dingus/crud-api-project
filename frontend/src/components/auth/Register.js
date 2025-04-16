@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import { FaUserPlus } from "react-icons/fa";
 
-const Register = () => {
+const Register = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,7 +18,6 @@ const Register = () => {
     setError("");
     setSuccess("");
 
-    // Validate passwords match
     if (password !== confirmPassword) {
       return setError("Passwords do not match");
     }
@@ -27,15 +26,23 @@ const Register = () => {
 
     try {
       await AuthService.register(username, password);
-      // Instead of auto-login, show success message and redirect after a delay
-      setSuccess("Registration successful! Redirecting to login page...");
-      
-      // Redirect to login page after a short delay
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } catch (err) {
-      setError(err.message || "Failed to register");
+      setSuccess("Registration successful! Logging you in..."); // Provide feedback
+
+      try {
+        await AuthService.login(username, password);
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+        navigate("/");
+      } catch (loginErr) {
+        setError(`Registration successful, but auto-login failed: ${loginErr.message}. Please log in manually.`);
+        setSuccess("");
+        setTimeout(() => navigate("/login"), 3000);
+      }
+
+    } catch (regErr) {
+      setError(regErr.message || "Failed to register");
+      setSuccess("");
     } finally {
       setLoading(false);
     }
@@ -90,21 +97,15 @@ const Register = () => {
                 </Form.Group>
 
                 <div className="d-grid gap-2">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    disabled={loading}
-                  >
+                  <Button variant="primary" type="submit" disabled={loading}>
                     {loading ? "Registering..." : "Register"}
                   </Button>
                 </div>
               </Form>
 
-              <div className="text-center mt-3">
-                Already have an account?{" "}
-                <Link to="/login" className="text-decoration-none">
-                  Login here
-                </Link>
+              <div className="mt-3 text-center">
+                <span>Already have an account? </span>
+                <Link to="/login">Login here</Link>
               </div>
             </Card.Body>
           </Card>

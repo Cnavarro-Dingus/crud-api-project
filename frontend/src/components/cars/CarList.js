@@ -15,7 +15,7 @@ import ConfirmationModal from "../modals/ConfirmationModal";
 import CarDetailsModal from "../modals/CarDetailsModal";
 import { useDebounce } from "../../hooks/useDebounce";
 import PaginationComponent from "../common/PaginationComponent";
-import FavoriteService from "../../services/FavoriteService";
+import FavoriteService from "../../services/FavoriteService"; // Ensure FavoriteService is imported
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -32,7 +32,7 @@ const CarList = () => {
   const [pageTransition, setPageTransition] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [favorites, setFavorites] = useState({});
+  const [favorites, setFavorites] = useState({}); // You already have this state
 
   // Load favorites when component mounts
   useEffect(() => {
@@ -96,12 +96,24 @@ const CarList = () => {
   const confirmDelete = async () => {
     if (carToDelete !== null) {
       try {
+        // Delete the car itself
         await CarService.deleteCar(carToDelete);
         setDeleteMessage("Car deleted successfully!");
-        
+
+        // Check if the car was a favorite and remove it if so
+        if (favorites[carToDelete]) {
+          await FavoriteService.removeFavorite(carToDelete);
+          // Update local favorites state
+          setFavorites(prev => {
+            const newFavorites = { ...prev };
+            delete newFavorites[carToDelete];
+            return newFavorites;
+          });
+        }
+
         // Refetch cars after successful deletion
         fetchCars();
-        
+
         setTimeout(() => {
           setDeleteMessage("");
         }, 3000);
