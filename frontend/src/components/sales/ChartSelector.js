@@ -16,7 +16,9 @@ const ChartSelector = ({ activeChart, onChartChange }) => {
               <FaCalendarAlt className="me-2" /> Annual Sales
             </Button>
             <Button
-              variant={activeChart === "country" ? "primary" : "outline-primary"}
+              variant={
+                activeChart === "country" ? "primary" : "outline-primary"
+              }
               onClick={() => onChartChange("country")}
               className="d-flex align-items-center"
             >

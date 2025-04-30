@@ -4,11 +4,11 @@ import AuthService from "../../services/AuthService";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = AuthService.isAuthenticated();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
-  
+
   return children;
 };
 

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Form, Button, Card, Alert, Container, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Card,
+  Alert,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import { FaUserPlus } from "react-icons/fa";
@@ -35,11 +43,12 @@ const Register = ({ onLoginSuccess }) => {
         }
         navigate("/");
       } catch (loginErr) {
-        setError(`Registration successful, but auto-login failed: ${loginErr.message}. Please log in manually.`);
+        setError(
+          `Registration successful, but auto-login failed: ${loginErr.message}. Please log in manually.`
+        );
         setSuccess("");
         setTimeout(() => navigate("/login"), 3000);
       }
-
     } catch (regErr) {
       setError(regErr.message || "Failed to register");
       setSuccess("");

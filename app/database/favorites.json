@@ -1,11 +1,7 @@
 {
   "cristian": [
     {
-      "features": [
-        "Panoramic Roof",
-        "Luxury Package",
-        "Convenience Package"
-      ],
+      "features": ["Panoramic Roof", "Luxury Package", "Convenience Package"],
       "id": 2,
       "make": "Mercedes-Benz",
       "model": "GLC",

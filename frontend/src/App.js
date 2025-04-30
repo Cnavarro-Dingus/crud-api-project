@@ -5,7 +5,7 @@ import {
   Route,
   Link,
   Navigate,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 import { Navbar, Container, Nav, Button, NavDropdown } from "react-bootstrap";
 import CarList from "./components/cars/CarList";
@@ -19,10 +19,19 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import AuthService from "./services/AuthService";
 import "./App.css";
 import FavoriteCars from "./components/cars/FavoriteCars";
-import { FaCar, FaPlus, FaChartBar, FaSignOutAlt, FaUser, FaStar } from "react-icons/fa";
+import {
+  FaCar,
+  FaPlus,
+  FaChartBar,
+  FaSignOutAlt,
+  FaUser,
+  FaStar,
+} from "react-icons/fa";
 
 function AppContent() {
-  const [isAuthenticated, setIsAuthenticated] = useState(AuthService.isAuthenticated());
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AuthService.isAuthenticated()
+  );
   const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
   const navigate = useNavigate();
 
@@ -108,15 +117,63 @@ function AppContent() {
 
       <Container className="mt-4">
         <Routes>
-          <Route path="/login" element={<Login onLoginSuccess={handleAuthChange} />} />
-          <Route path="/register" element={<Register onLoginSuccess={handleAuthChange} />} />
+          <Route
+            path="/login"
+            element={<Login onLoginSuccess={handleAuthChange} />}
+          />
+          <Route
+            path="/register"
+            element={<Register onLoginSuccess={handleAuthChange} />}
+          />
 
-          <Route path="/" element={<PrivateRoute><CarList /></PrivateRoute>} />
-          <Route path="/add" element={<PrivateRoute><AddCar /></PrivateRoute>} />
-          <Route path="/edit/:id" element={<PrivateRoute><EditCar /></PrivateRoute>} />
-          <Route path="/sales/:model/:year" element={<PrivateRoute><SalesDetails /></PrivateRoute>} />
-          <Route path="/sales-overview" element={<PrivateRoute><SalesOverview /></PrivateRoute>} />
-          <Route path="/favorites" element={<PrivateRoute><FavoriteCars /></PrivateRoute>} />
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <CarList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add"
+            element={
+              <PrivateRoute>
+                <AddCar />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <PrivateRoute>
+                <EditCar />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/sales/:model/:year"
+            element={
+              <PrivateRoute>
+                <SalesDetails />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/sales-overview"
+            element={
+              <PrivateRoute>
+                <SalesOverview />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/favorites"
+            element={
+              <PrivateRoute>
+                <FavoriteCars />
+              </PrivateRoute>
+            }
+          />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

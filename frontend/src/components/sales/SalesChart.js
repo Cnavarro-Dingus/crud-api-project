@@ -10,7 +10,7 @@ const SalesChart = ({
   modelSalesData,
   loading,
   error,
-  animating
+  animating,
 }) => {
   if (loading) {
     return (

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Card, Button, Alert, Row, Col } from "react-bootstrap";
 import {
-  Card,
-  Button,
-  Alert,
-  Row,
-  Col,
-} from "react-bootstrap";
-import { FaChartBar, FaPencilRuler, FaInfoCircle, FaStar, FaArrowLeft, FaBackspace } from "react-icons/fa";
+  FaChartBar,
+  FaPencilRuler,
+  FaInfoCircle,
+  FaStar,
+  FaArrowLeft,
+  FaBackspace,
+} from "react-icons/fa";
 import FavoriteService from "../../services/FavoriteService";
 import CarService from "../../services/CarService";
 import ConfirmationModal from "../modals/ConfirmationModal";
@@ -33,7 +34,7 @@ const FavoriteCars = () => {
       const favorites = await FavoriteService.getFavorites();
       setFavoriteCars(favorites);
     } catch (error) {
-      console.error('Error loading favorites:', error);
+      console.error("Error loading favorites:", error);
     }
   };
 
@@ -43,13 +44,13 @@ const FavoriteCars = () => {
   };
 
   const handleRemoveFromFavorites = (carId) => {
-    setFavoriteCars(prev => prev.filter(car => car.id !== carId));
-    
-    FavoriteService.removeFavorite(carId).catch(error => {
-      console.error('Error removing favorite:', error);
+    setFavoriteCars((prev) => prev.filter((car) => car.id !== carId));
+
+    FavoriteService.removeFavorite(carId).catch((error) => {
+      console.error("Error removing favorite:", error);
       loadFavorites();
     });
-    
+
     setCarToRemove(carId);
     setShowRemoveModal(true);
   };
@@ -62,7 +63,7 @@ const FavoriteCars = () => {
         setShowRemoveModal(false);
         setCarToRemove(null);
       } catch (error) {
-        console.error('Error removing favorite:', error);
+        console.error("Error removing favorite:", error);
       }
     }
   };
@@ -77,11 +78,11 @@ const FavoriteCars = () => {
       try {
         await CarService.deleteCar(carToDelete);
         setDeleteMessage("Car deleted successfully!");
-        
+
         FavoriteService.removeFavorite(carToDelete);
-        
+
         loadFavorites();
-        
+
         setTimeout(() => {
           setDeleteMessage("");
         }, 3000);
@@ -198,7 +199,7 @@ const FavoriteCars = () => {
         message="Are you sure you want to remove this car from your favorites?"
         title="Confirm Remove"
       />
-      
+
       <ConfirmationModal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
@@ -206,7 +207,7 @@ const FavoriteCars = () => {
         message="Are you sure you want to delete this car? This action cannot be undone."
         title="Confirm Delete"
       />
-      
+
       {selectedCar && (
         <CarDetailsModal
           show={showDetailsModal}

@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Modal, Button, ListGroup, Badge } from "react-bootstrap";
 import { FaCarSide } from "react-icons/fa";
 import AuthService from "../../services/AuthService";
-import StarRating from "../common/StarRating"
+import StarRating from "../common/StarRating";
 import ReviewItem from "../common/ReviewItem";
 import AddReviewForm from "../common/AddReviewForm";
 
@@ -17,7 +17,10 @@ const CarDetailsModal = memo(({ show, onHide, car, onReviewUpdate }) => {
       aria-labelledby="car-details-modal-title"
     >
       <Modal.Header closeButton>
-        <Modal.Title id="car-details-modal-title" className="d-flex align-items-center">
+        <Modal.Title
+          id="car-details-modal-title"
+          className="d-flex align-items-center"
+        >
           <FaCarSide className="me-2" />
           {car.make} {car.model} ({car.year})
         </Modal.Title>
@@ -27,7 +30,9 @@ const CarDetailsModal = memo(({ show, onHide, car, onReviewUpdate }) => {
           <div className="mb-3 d-flex align-items-center">
             <h5 className="mb-0 me-2">Average Rating:</h5>
             <StarRating rating={car.average_rating} />
-            <Badge pill bg="primary" className="ms-2">{car.average_rating.toFixed(1)} / 5</Badge>
+            <Badge pill bg="primary" className="ms-2">
+              {car.average_rating.toFixed(1)} / 5
+            </Badge>
           </div>
         )}
 
@@ -49,7 +54,11 @@ const CarDetailsModal = memo(({ show, onHide, car, onReviewUpdate }) => {
           <ListGroup variant="flush" className="mb-3 review-list">
             {car.reviews.map((review) => (
               <ListGroup.Item key={review.id} className="review-item">
-                <ReviewItem review={review} carId={car.id} onUpdate={onReviewUpdate} />
+                <ReviewItem
+                  review={review}
+                  carId={car.id}
+                  onUpdate={onReviewUpdate}
+                />
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -58,9 +67,8 @@ const CarDetailsModal = memo(({ show, onHide, car, onReviewUpdate }) => {
         )}
 
         {AuthService.isAuthenticated() && (
-           <AddReviewForm carId={car.id} onReviewAdded={onReviewUpdate} />
+          <AddReviewForm carId={car.id} onReviewAdded={onReviewUpdate} />
         )}
-
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>

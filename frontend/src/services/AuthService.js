@@ -16,7 +16,9 @@ class AuthService {
       if (error.response) {
         throw new Error(error.response.data.error || "Registration failed");
       } else if (error.request) {
-        throw new Error("No response from server. Please check your connection.");
+        throw new Error(
+          "No response from server. Please check your connection."
+        );
       } else {
         throw new Error(error.message || "Error setting up request");
       }
@@ -39,17 +41,22 @@ class AuthService {
 
       currentUserData = {
         username,
-        authHeader
+        authHeader,
       };
 
-      return { message: 'Login successful', username };
-
+      return { message: "Login successful", username };
     } catch (error) {
       currentUserData = null;
       if (error.response) {
-        throw new Error(error.response.data.error || error.response.data.message || "Login failed");
+        throw new Error(
+          error.response.data.error ||
+            error.response.data.message ||
+            "Login failed"
+        );
       } else if (error.request) {
-        throw new Error("No response from server. Please check your connection.");
+        throw new Error(
+          "No response from server. Please check your connection."
+        );
       } else {
         throw new Error(error.message || "Error setting up request");
       }

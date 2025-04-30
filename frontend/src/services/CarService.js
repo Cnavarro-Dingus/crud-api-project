@@ -36,10 +36,10 @@ class CarService {
   static async apiRequest(method, url, data = null, useCache = false) {
     const cacheKey = `${method}-${url}-${JSON.stringify(data)}`;
     const headers = {
-      'Content-Type': 'application/json',
-      ...getAuthHeader()
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
     };
-    
+
     if (useCache && method.toLowerCase() === "get") {
       const cachedData = cache.get(cacheKey);
       if (cachedData) {
@@ -52,7 +52,7 @@ class CarService {
         method,
         url: `${API_URL}${url}`,
         data,
-        headers
+        headers,
       };
       const response = await axios(config);
 

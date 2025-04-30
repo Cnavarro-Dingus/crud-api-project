@@ -1,7 +1,12 @@
 import React from "react";
 import { Pagination } from "react-bootstrap";
 
-const PaginationComponent = ({ totalCount, itemsPerPage, currentPage, onPageChange }) => {
+const PaginationComponent = ({
+  totalCount,
+  itemsPerPage,
+  currentPage,
+  onPageChange,
+}) => {
   return (
     <Pagination className="mt-4 justify-content-center pagination-container">
       {totalCount > itemsPerPage && (
@@ -21,8 +26,7 @@ const PaginationComponent = ({ totalCount, itemsPerPage, currentPage, onPageChan
               if (
                 pageNumber === 1 ||
                 pageNumber === Math.ceil(totalCount / itemsPerPage) ||
-                (pageNumber >= currentPage - 1 &&
-                  pageNumber <= currentPage + 1)
+                (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
               ) {
                 return (
                   <Pagination.Item
@@ -35,8 +39,7 @@ const PaginationComponent = ({ totalCount, itemsPerPage, currentPage, onPageChan
                 );
               } else if (
                 (pageNumber === 2 && currentPage > 3) ||
-                (pageNumber ===
-                  Math.ceil(totalCount / itemsPerPage) - 1 &&
+                (pageNumber === Math.ceil(totalCount / itemsPerPage) - 1 &&
                   currentPage < Math.ceil(totalCount / itemsPerPage) - 2)
               ) {
                 return <Pagination.Ellipsis key={`ellipsis-${pageNumber}`} />;
@@ -48,18 +51,13 @@ const PaginationComponent = ({ totalCount, itemsPerPage, currentPage, onPageChan
           <Pagination.Next
             onClick={() =>
               onPageChange(
-                Math.min(
-                  Math.ceil(totalCount / itemsPerPage),
-                  currentPage + 1
-                )
+                Math.min(Math.ceil(totalCount / itemsPerPage), currentPage + 1)
               )
             }
             disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
           />
           <Pagination.Last
-            onClick={() =>
-              onPageChange(Math.ceil(totalCount / itemsPerPage))
-            }
+            onClick={() => onPageChange(Math.ceil(totalCount / itemsPerPage))}
             disabled={currentPage === Math.ceil(totalCount / itemsPerPage)}
           />
         </>

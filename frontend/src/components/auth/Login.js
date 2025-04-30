@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Form, Button, Card, Alert, Container, Row, Col } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Card,
+  Alert,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import { FaSignInAlt } from "react-icons/fa";
@@ -15,7 +23,7 @@ const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
+
     try {
       await AuthService.login(username, password);
       if (onLoginSuccess) {

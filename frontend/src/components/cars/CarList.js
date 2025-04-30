@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  Button,
-  Alert,
-  Spinner,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Card, Button, Alert, Spinner, Row, Col } from "react-bootstrap";
 import CarService from "../../services/CarService";
 import SearchBar from "../common/SearchBar";
-import { FaChartBar, FaBackspace, FaPencilRuler, FaInfoCircle, FaStar } from "react-icons/fa";
+import {
+  FaChartBar,
+  FaBackspace,
+  FaPencilRuler,
+  FaInfoCircle,
+  FaStar,
+} from "react-icons/fa";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import CarDetailsModal from "../modals/CarDetailsModal";
 import { useDebounce } from "../../hooks/useDebounce";
@@ -32,7 +31,6 @@ const CarList = () => {
   const [pageTransition, setPageTransition] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [loadingDetails, setLoadingDetails] = useState(false);
   const [favorites, setFavorites] = useState({});
 
   useEffect(() => {
@@ -40,15 +38,15 @@ const CarList = () => {
       try {
         const userFavorites = await FavoriteService.getFavorites();
         const favoritesMap = {};
-        userFavorites.forEach(car => {
+        userFavorites.forEach((car) => {
           favoritesMap[car.id] = true;
         });
         setFavorites(favoritesMap);
       } catch (error) {
-        console.error('Error loading favorites:', error);
+        console.error("Error loading favorites:", error);
       }
     };
-    
+
     loadFavorites();
   }, []);
 
@@ -98,7 +96,7 @@ const CarList = () => {
 
         if (favorites[carToDelete]) {
           await FavoriteService.removeFavorite(carToDelete);
-          setFavorites(prev => {
+          setFavorites((prev) => {
             const newFavorites = { ...prev };
             delete newFavorites[carToDelete];
             return newFavorites;
@@ -120,26 +118,24 @@ const CarList = () => {
     }
   };
 
-    const handleViewDetails = async (carStub) => {
-    setLoadingDetails(true);
+  const handleViewDetails = async (carStub) => {
     setError(null);
     try {
       const fullCarData = await CarService.getCarById(carStub.id);
       setSelectedCar(fullCarData);
       setShowDetailsModal(true);
     } catch (err) {
-      setError(`Failed to fetch details for ${carStub.model}. Please try again.`);
+      setError(
+        `Failed to fetch details for ${carStub.model}. Please try again.`
+      );
       console.error("Error fetching car details:", err);
       setSelectedCar(null);
       setShowDetailsModal(false);
-    } finally {
-      setLoadingDetails(false);
     }
   };
 
   const handleReviewUpdate = async () => {
     if (selectedCar) {
-      setLoadingDetails(true);
       try {
         const updatedCarData = await CarService.getCarById(selectedCar.id);
         setSelectedCar(updatedCarData);
@@ -147,22 +143,21 @@ const CarList = () => {
         setError("Failed to refresh car details after review update.");
         console.error("Error refetching car details:", err);
       } finally {
-        setLoadingDetails(false);
       }
     }
   };
 
   const toggleFavorite = (car) => {
     if (!FavoriteService.isPending(car.id)) {
-      setFavorites(prev => ({
+      setFavorites((prev) => ({
         ...prev,
-        [car.id]: !prev[car.id]
+        [car.id]: !prev[car.id],
       }));
-      
+
       FavoriteService.toggleFavorite(car, (newState) => {
-        setFavorites(prev => ({
+        setFavorites((prev) => ({
           ...prev,
-          [car.id]: newState
+          [car.id]: newState,
         }));
       });
     }
@@ -227,7 +222,9 @@ const CarList = () => {
                     <Card.Title>
                       {car.make} {car.model}
                       <FaStar
-                        className={`favorite-star ${favorites[car.id] ? "star-favorite" : "star"}`}
+                        className={`favorite-star ${
+                          favorites[car.id] ? "star-favorite" : "star"
+                        }`}
                         onClick={() => toggleFavorite(car)}
                       />
                     </Card.Title>
@@ -252,9 +249,6 @@ const CarList = () => {
                     >
                       <FaInfoCircle className="me-1" /> Details
                     </Button>
-                      {loadingDetails && selectedCar?.id === car.id && 
-                        <Spinner animation="border" size="sm" className="ms-2" />
-                      }
                     <Link
                       to={`/edit/${car.id}`}
                       className="btn btn-primary btn-sm me-2 btn-action"
@@ -296,7 +290,7 @@ const CarList = () => {
         message="Are you sure you want to delete this car? This action cannot be undone."
         title="Confirm Delete"
       />
-      
+
       {selectedCar && (
         <CarDetailsModal
           show={showDetailsModal}

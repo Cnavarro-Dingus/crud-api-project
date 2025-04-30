@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
-import { Form, Button, Alert, Spinner,Card } from 'react-bootstrap';
-import { FaStar, FaPaperPlane } from 'react-icons/fa';
-import ReviewService from '../../services/ReviewService';
+import React, { useState } from "react";
+import { Form, Button, Alert, Spinner, Card } from "react-bootstrap";
+import { FaStar, FaPaperPlane } from "react-icons/fa";
+import ReviewService from "../../services/ReviewService";
 
 const AddReviewForm = ({ carId, onReviewAdded }) => {
   const [rating, setRating] = useState(0);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (rating === 0 || !text.trim()) {
-      setError('Please provide both a rating and a review text.');
+      setError("Please provide both a rating and a review text.");
       return;
     }
 
     setLoading(true);
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       await ReviewService.addReview(carId, { rating, text });
-      setSuccess('Review added successfully!');
+      setSuccess("Review added successfully!");
       setRating(0);
-      setText('');
+      setText("");
       if (onReviewAdded) {
         onReviewAdded();
       }
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError('Failed to add review. Please try again.');
-      console.error('Add review error:', err);
+      setError("Failed to add review. Please try again.");
+      console.error("Add review error:", err);
     } finally {
       setLoading(false);
     }
@@ -42,8 +42,16 @@ const AddReviewForm = ({ carId, onReviewAdded }) => {
     <Card className="mt-4 shadow-sm">
       <Card.Header as="h6">Add Your Review</Card.Header>
       <Card.Body>
-        {error && <Alert variant="danger" onClose={() => setError('')} dismissible>{error}</Alert>}
-        {success && <Alert variant="success" onClose={() => setSuccess('')} dismissible>{success}</Alert>}
+        {error && (
+          <Alert variant="danger" onClose={() => setError("")} dismissible>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert variant="success" onClose={() => setSuccess("")} dismissible>
+            {success}
+          </Alert>
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Your Rating</Form.Label>
@@ -52,10 +60,10 @@ const AddReviewForm = ({ carId, onReviewAdded }) => {
                 <FaStar
                   key={star}
                   size={25}
-                  color={star <= rating ? '#ffc107' : '#e4e5e9'}
+                  color={star <= rating ? "#ffc107" : "#e4e5e9"}
                   onClick={() => setRating(star)}
-                  style={{ cursor: 'pointer', marginRight: '5px' }}
-                  aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                  style={{ cursor: "pointer", marginRight: "5px" }}
+                  aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
                 />
               ))}
             </div>
@@ -73,9 +81,20 @@ const AddReviewForm = ({ carId, onReviewAdded }) => {
           </Form.Group>
           <Button type="submit" variant="primary" disabled={loading}>
             {loading ? (
-              <><Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> Submitting...</>
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{" "}
+                Submitting...
+              </>
             ) : (
-              <><FaPaperPlane className="me-1" /> Submit Review</>
+              <>
+                <FaPaperPlane className="me-1" /> Submit Review
+              </>
             )}
           </Button>
         </Form>

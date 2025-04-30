@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import React from "react";
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const StarRating = ({ rating, size = 20 }) => {
   const fullStars = Math.floor(rating);
@@ -7,7 +7,9 @@ const StarRating = ({ rating, size = 20 }) => {
   const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', color: '#ffc107' }}>
+    <div
+      style={{ display: "inline-flex", alignItems: "center", color: "#ffc107" }}
+    >
       {[...Array(fullStars)].map((_, i) => (
         <FaStar key={`full-${i}`} size={size} />
       ))}

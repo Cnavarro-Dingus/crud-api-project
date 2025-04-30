@@ -54,12 +54,17 @@ const EditCar = () => {
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
-      
+
       <h2 className="form-page-title mb-4">Edit Car</h2>
-      
+
       {loading ? (
         <div className="text-center py-5">
-          <Spinner animation="border" role="status" variant="primary" aria-label="Loading" />
+          <Spinner
+            animation="border"
+            role="status"
+            variant="primary"
+            aria-label="Loading"
+          />
           <p className="mt-3">Loading car data...</p>
         </div>
       ) : error ? (

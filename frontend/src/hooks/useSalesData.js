@@ -42,7 +42,9 @@ export const useSalesData = (topModelsCount) => {
 
         setAllSalesData(sales);
 
-        const years = [...new Set(sales.map((sale) => String(sale.sale_year)))].sort();
+        const years = [
+          ...new Set(sales.map((sale) => String(sale.sale_year))),
+        ].sort();
         const makes = [...new Set(sales.map((sale) => sale.make))].sort();
         const continentSet = new Set();
 
@@ -114,6 +116,6 @@ export const useSalesData = (topModelsCount) => {
     setSelectedMake,
     availableYears,
     availableMakes,
-    continents
+    continents,
   };
 };

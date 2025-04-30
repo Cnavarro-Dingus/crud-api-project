@@ -10,8 +10,8 @@ const getAuthHeader = () => {
 class ReviewService {
   static async apiRequest(method, url, data = null) {
     const headers = {
-      'Content-Type': 'application/json',
-      ...getAuthHeader()
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
     };
 
     try {
@@ -19,7 +19,7 @@ class ReviewService {
         method,
         url: `${API_URL}${url}`,
         data,
-        headers
+        headers,
       };
       const response = await axios(config);
       return response.data;
@@ -31,7 +31,9 @@ class ReviewService {
         errorObj.data = error.response.data;
         throw errorObj;
       } else if (error.request) {
-        const errorObj = new Error("No response from server. Please check your connection.");
+        const errorObj = new Error(
+          "No response from server. Please check your connection."
+        );
         errorObj.status = 0;
         throw errorObj;
       } else {

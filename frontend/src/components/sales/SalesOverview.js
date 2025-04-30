@@ -44,7 +44,7 @@ const SalesOverview = () => {
     setSelectedMake,
     availableYears,
     availableMakes,
-    continents
+    continents,
   } = useSalesData(topModelsCount);
 
   const handleChartChange = (chartType) => {
@@ -116,7 +116,7 @@ const SalesOverview = () => {
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
-      
+
       <FilterCard
         selectedYear={selectedYear}
         setSelectedYear={setSelectedYear}
@@ -131,12 +131,12 @@ const SalesOverview = () => {
         topModelsCount={topModelsCount}
         setTopModelsCount={setTopModelsCount}
       />
-      
-      <ChartSelector 
-        activeChart={activeChart} 
-        onChartChange={handleChartChange} 
+
+      <ChartSelector
+        activeChart={activeChart}
+        onChartChange={handleChartChange}
       />
-      
+
       <Card>
         <Card.Body>
           <div className="chart-title d-flex justify-content-between align-items-center">
@@ -169,7 +169,7 @@ const SalesOverview = () => {
               <FaDownload className="me-1" /> Export Data
             </Button>
           </div>
-          
+
           <div className="chart-wrapper" style={{ height: "600px" }}>
             <SalesChart
               activeChart={activeChart}

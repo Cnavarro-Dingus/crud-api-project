@@ -44,7 +44,11 @@ const AddCar = () => {
         </Link>
       </div>
       <h2 className="form-page-title mb-4">Add New Car</h2>
-      {error && <Alert variant="danger" className="form-error" aria-live="assertive">{error}</Alert>}
+      {error && (
+        <Alert variant="danger" className="form-error" aria-live="assertive">
+          {error}
+        </Alert>
+      )}
       <CarForm
         initialCar={initialCar}
         onSubmit={handleSubmit}

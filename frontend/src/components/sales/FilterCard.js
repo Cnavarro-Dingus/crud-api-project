@@ -51,7 +51,7 @@ const FilterCard = ({
               >
                 <option value="all">All Continents</option>
                 {continents
-                  .filter(continent => continent.toLowerCase() !== "other")
+                  .filter((continent) => continent.toLowerCase() !== "other")
                   .map((continent) => (
                     <option key={continent} value={continent}>
                       {continent}
