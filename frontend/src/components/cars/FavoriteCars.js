@@ -43,17 +43,13 @@ const FavoriteCars = () => {
   };
 
   const handleRemoveFromFavorites = (carId) => {
-    // Optimistic UI update - immediately show the car as removed
     setFavoriteCars(prev => prev.filter(car => car.id !== carId));
     
-    // Then perform the actual server operation
     FavoriteService.removeFavorite(carId).catch(error => {
-      // If there's an error, reload the favorites to get the correct state
       console.error('Error removing favorite:', error);
       loadFavorites();
     });
     
-    // Keep the modal functionality if you still want it
     setCarToRemove(carId);
     setShowRemoveModal(true);
   };
@@ -82,10 +78,8 @@ const FavoriteCars = () => {
         await CarService.deleteCar(carToDelete);
         setDeleteMessage("Car deleted successfully!");
         
-        // Remove from favorites as well
         FavoriteService.removeFavorite(carToDelete);
         
-        // Reload favorites
         loadFavorites();
         
         setTimeout(() => {

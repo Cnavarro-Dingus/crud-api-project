@@ -1,4 +1,3 @@
-// Country to continent mapping for filtering
 export const countryContinentMap = {
   "United States": "North America",
   Canada: "North America",
@@ -54,7 +53,6 @@ export const countryContinentMap = {
   Kenya: "Africa",
 };
 
-// Helper function to get continent from country
 export const getContinentFromCountry = (country) => {
   return countryContinentMap[country] || "Other";
 };

@@ -15,7 +15,7 @@ import ConfirmationModal from "../modals/ConfirmationModal";
 import CarDetailsModal from "../modals/CarDetailsModal";
 import { useDebounce } from "../../hooks/useDebounce";
 import PaginationComponent from "../common/PaginationComponent";
-import FavoriteService from "../../services/FavoriteService"; // Ensure FavoriteService is imported
+import FavoriteService from "../../services/FavoriteService";
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
@@ -32,9 +32,9 @@ const CarList = () => {
   const [pageTransition, setPageTransition] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [favorites, setFavorites] = useState({}); // You already have this state
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [favorites, setFavorites] = useState({});
 
-  // Load favorites when component mounts
   useEffect(() => {
     const loadFavorites = async () => {
       try {
@@ -52,7 +52,6 @@ const CarList = () => {
     loadFavorites();
   }, []);
 
-  // Function to fetch cars - memoized with useCallback
   const fetchCars = useCallback(async () => {
     try {
       setLoading(true);
@@ -72,12 +71,10 @@ const CarList = () => {
     }
   }, [debouncedSearchTerm, currentPage, itemsPerPage]);
 
-  // Fetch cars based on debounced search term
   useEffect(() => {
     fetchCars();
   }, [fetchCars]);
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     if (currentPage !== pageNumber) {
       setPageTransition(true);
@@ -96,14 +93,11 @@ const CarList = () => {
   const confirmDelete = async () => {
     if (carToDelete !== null) {
       try {
-        // Delete the car itself
         await CarService.deleteCar(carToDelete);
         setDeleteMessage("Car deleted successfully!");
 
-        // Check if the car was a favorite and remove it if so
         if (favorites[carToDelete]) {
           await FavoriteService.removeFavorite(carToDelete);
-          // Update local favorites state
           setFavorites(prev => {
             const newFavorites = { ...prev };
             delete newFavorites[carToDelete];
@@ -111,7 +105,6 @@ const CarList = () => {
           });
         }
 
-        // Refetch cars after successful deletion
         fetchCars();
 
         setTimeout(() => {
@@ -127,25 +120,46 @@ const CarList = () => {
     }
   };
 
-  const handleViewDetails = (car) => {
-    setSelectedCar(car);
-    setShowDetailsModal(true);
+    const handleViewDetails = async (carStub) => {
+    setLoadingDetails(true);
+    setError(null);
+    try {
+      const fullCarData = await CarService.getCarById(carStub.id);
+      setSelectedCar(fullCarData);
+      setShowDetailsModal(true);
+    } catch (err) {
+      setError(`Failed to fetch details for ${carStub.model}. Please try again.`);
+      console.error("Error fetching car details:", err);
+      setSelectedCar(null);
+      setShowDetailsModal(false);
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
-  // Find the toggleFavorite function in your CarList.js and update it:
+  const handleReviewUpdate = async () => {
+    if (selectedCar) {
+      setLoadingDetails(true);
+      try {
+        const updatedCarData = await CarService.getCarById(selectedCar.id);
+        setSelectedCar(updatedCarData);
+      } catch (err) {
+        setError("Failed to refresh car details after review update.");
+        console.error("Error refetching car details:", err);
+      } finally {
+        setLoadingDetails(false);
+      }
+    }
+  };
 
   const toggleFavorite = (car) => {
-    // Only proceed if we're not already processing this car
     if (!FavoriteService.isPending(car.id)) {
-      // Optimistic update - immediately update the UI
       setFavorites(prev => ({
         ...prev,
         [car.id]: !prev[car.id]
       }));
       
-      // Then perform the actual server operation
       FavoriteService.toggleFavorite(car, (newState) => {
-        // This callback will be called if there's an error and we need to revert
         setFavorites(prev => ({
           ...prev,
           [car.id]: newState
@@ -238,6 +252,9 @@ const CarList = () => {
                     >
                       <FaInfoCircle className="me-1" /> Details
                     </Button>
+                      {loadingDetails && selectedCar?.id === car.id && 
+                        <Spinner animation="border" size="sm" className="ms-2" />
+                      }
                     <Link
                       to={`/edit/${car.id}`}
                       className="btn btn-primary btn-sm me-2 btn-action"
@@ -285,6 +302,7 @@ const CarList = () => {
           show={showDetailsModal}
           onHide={() => setShowDetailsModal(false)}
           car={selectedCar}
+          onReviewUpdate={handleReviewUpdate}
         />
       )}
     </div>

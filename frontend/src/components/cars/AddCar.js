@@ -39,14 +39,12 @@ const AddCar = () => {
   return (
     <div className="fade-in">
       <div className="mb-4 text-end">
-        <Link to="/" className="btn btn-secondary"> {/* Updated button styling */}
+        <Link to="/" className="btn btn-secondary">
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
-      
       <h2 className="form-page-title mb-4">Add New Car</h2>
-      
-      {error && <Alert variant="danger" className="form-error" aria-live="assertive">{error}</Alert>} {/* Added ARIA attribute */}
+      {error && <Alert variant="danger" className="form-error" aria-live="assertive">{error}</Alert>}
       <CarForm
         initialCar={initialCar}
         onSubmit={handleSubmit}

@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../services/AuthService";
 import { FaSignInAlt } from "react-icons/fa";
 
-// Add this to your Login component
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +18,6 @@ const Login = ({ onLoginSuccess }) => {
     
     try {
       await AuthService.login(username, password);
-      // Call the onLoginSuccess callback
       if (onLoginSuccess) {
         onLoginSuccess();
       }

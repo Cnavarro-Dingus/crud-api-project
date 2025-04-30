@@ -3,11 +3,9 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-// Local cache to track pending operations
 const pendingOperations = new Map();
 
 const FavoriteService = {
-  // Get favorites for current user
   getFavorites: async () => {
     try {
       const currentUser = AuthService.getCurrentUser();
@@ -26,13 +24,11 @@ const FavoriteService = {
     }
   },
   
-  // Add a car to favorites
   addFavorite: async (car) => {
     try {
       const currentUser = AuthService.getCurrentUser();
       if (!currentUser) return false;
       
-      // Add to pending operations
       const operationKey = `add-${car.id}`;
       pendingOperations.set(operationKey, true);
       
@@ -48,19 +44,16 @@ const FavoriteService = {
     } catch (error) {
       console.error('Error adding favorite:', error);
       
-      // Remove from pending operations on error
       pendingOperations.delete(`add-${car.id}`);
       return false;
     }
   },
   
-  // Remove a car from favorites
   removeFavorite: async (carId) => {
     try {
       const currentUser = AuthService.getCurrentUser();
       if (!currentUser) return false;
       
-      // Add to pending operations
       const operationKey = `remove-${carId}`;
       pendingOperations.set(operationKey, true);
       
@@ -75,13 +68,11 @@ const FavoriteService = {
     } catch (error) {
       console.error('Error removing favorite:', error);
       
-      // Remove from pending operations on error
       pendingOperations.delete(`remove-${carId}`);
       return false;
     }
   },
   
-  // Toggle favorite status with optimistic UI update
   toggleFavorite: async (car, optimisticUpdateCallback) => {
     const currentUser = AuthService.getCurrentUser();
     if (!currentUser) return;
@@ -90,12 +81,10 @@ const FavoriteService = {
       const favorites = await FavoriteService.getFavorites();
       const isFavorite = favorites.some(fav => fav.id === car.id);
       
-      // Immediately call the callback for UI update
       if (optimisticUpdateCallback) {
         optimisticUpdateCallback(!isFavorite);
       }
       
-      // Then perform the actual operation
       if (isFavorite) {
         await FavoriteService.removeFavorite(car.id);
       } else {
@@ -106,7 +95,6 @@ const FavoriteService = {
     } catch (error) {
       console.error('Error toggling favorite:', error);
       
-      // If there was an error, revert the optimistic update
       if (optimisticUpdateCallback) {
         const favorites = await FavoriteService.getFavorites();
         const isFavorite = favorites.some(fav => fav.id === car.id);
@@ -117,7 +105,6 @@ const FavoriteService = {
     }
   },
   
-  // Check if a car is a favorite
   isFavorite: async (carId) => {
     try {
       const favorites = await FavoriteService.getFavorites();
@@ -128,7 +115,6 @@ const FavoriteService = {
     }
   },
   
-  // Check if there's a pending operation for this car
   isPending: (carId) => {
     return pendingOperations.has(`add-${carId}`) || pendingOperations.has(`remove-${carId}`);
   }

@@ -14,7 +14,6 @@ import {
 } from "chart.js";
 import CarService from "../../services/CarService";
 
-// Register the necessary scales and elements
 ChartJS.register(
   CategoryScale,
   LinearScale,

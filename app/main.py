@@ -4,17 +4,17 @@ from werkzeug.security import generate_password_hash
 from routes.cars import cars_bp
 from routes.sales import sales_bp
 from routes.favorites import favorites_bp
+from routes.reviews import reviews_bp
 from auth import auth, read_users_db, write_users_db
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
-# Register blueprints
 app.register_blueprint(cars_bp)
 app.register_blueprint(sales_bp)
 app.register_blueprint(favorites_bp)
+app.register_blueprint(reviews_bp)
 
-# User registration endpoint
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
@@ -34,7 +34,6 @@ def register():
     
     return jsonify({'message': 'User registered successfully'}), 201
 
-# User login endpoint (for validation)
 @app.route('/login', methods=['POST'])
 @auth.login_required
 def login():

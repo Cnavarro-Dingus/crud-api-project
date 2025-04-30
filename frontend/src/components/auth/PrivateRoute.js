@@ -6,7 +6,6 @@ const PrivateRoute = ({ children }) => {
   const isAuthenticated = AuthService.isAuthenticated();
   
   if (!isAuthenticated) {
-    // Redirect to login if not authenticated
     return <Navigate to="/login" />;
   }
   

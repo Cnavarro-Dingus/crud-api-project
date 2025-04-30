@@ -7,11 +7,9 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
     setSearchTerm("");
   };
 
-  // Optional: Debounce input changes
   const handleChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    // Add debounce logic here if needed
   };
 
   return (
@@ -25,7 +23,7 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => {
           type="text"
           placeholder="Enter model name"
           value={searchTerm}
-          onChange={handleChange} // Updated to use handleChange
+          onChange={handleChange}
           aria-label="Search models"
         />
         {searchTerm && (

@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--light-color); /* Use CSS variable */
+  background-color: var(--light-color);
 }
 
 code {
@@ -21,7 +21,7 @@ code {
 
 .card {
   margin-bottom: 20px;
-  box-shadow: var(--shadow); /* Use CSS variable */
+  box-shadow: var(--shadow);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -51,12 +51,12 @@ code {
 
 .btn-action {
   margin-right: 5px;
-  transition: var(--transition); /* Use CSS variable */
+  transition: var(--transition);
 }
 
 .btn-action:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow); /* Use CSS variable */
+  box-shadow: var(--shadow);
 }
 
 .form-group {
@@ -74,7 +74,7 @@ code {
 }
 
 .form-select {
-  transition: var(--transition); /* Use CSS variable */
+  transition: var(--transition);
   border-radius: 6px;
 }
 
@@ -88,7 +88,6 @@ code {
   margin-bottom: 20px;
 }
 
-/* Feature text styling */
 .feature-text-container {
   position: relative;
   min-height: 60px;
@@ -117,11 +116,10 @@ code {
   pointer-events: none;
 }
 
-/* Filter card styling */
 .filter-card {
   border-radius: 8px;
-  box-shadow: var(--shadow); /* Use CSS variable */
-  background-color: var(--light-color); /* Use CSS variable */
+  box-shadow: var(--shadow);
+  background-color: var(--light-color);
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -139,7 +137,6 @@ code {
   font-style: italic;
 }
 
-/* Page transition animations */
 @keyframes fadeOut {
   from {
     opacity: 1;
@@ -170,7 +167,6 @@ code {
   animation: fadeIn 0.3s ease-in forwards;
 }
 
-/* Pagination Styling */
 .pagination {
   margin-top: 2rem;
   display: flex;
@@ -187,20 +183,20 @@ code {
   justify-content: center;
   font-weight: 500;
   color: #495057;
-  background-color: var(--light-color); /* Use CSS variable */
+  background-color: var(--light-color);
   border: 2px solid #dee2e6;
-  transition: var(--transition); /* Use CSS variable */
+  transition: var(--transition);
 }
 
 .pagination .page-item .page-link:hover {
   background-color: #e9ecef;
   transform: translateY(-3px);
-  box-shadow: var(--shadow); /* Use CSS variable */
+  box-shadow: var(--shadow);
 }
 
 .pagination .page-item.active .page-link {
-  background-color: var(--primary-color); /* Use CSS variable */
-  border-color: var(--primary-color); /* Use CSS variable */
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
   color: white;
   transform: scale(1.1);
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
@@ -210,7 +206,6 @@ code {
   background-color: #0069d9;
 }
 
-/* Pagination animation */
 .pagination .page-item {
   animation: fadeInUp 0.5s ease forwards;
   opacity: 0;
@@ -227,7 +222,6 @@ code {
   }
 }
 
-/* Apply different animation delays to pagination items */
 .pagination .page-item:nth-child(1) {
   animation-delay: 0.1s;
 }
@@ -244,7 +238,6 @@ code {
   animation-delay: 0.5s;
 }
 
-/* Chart related styles - kept because they're used in other components */
 .chart-selector {
   display: flex;
   justify-content: center;
@@ -257,19 +250,19 @@ code {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1rem;
-  transition: var(--transition); /* Use CSS variable */
+  transition: var(--transition);
   width: 160px;
 }
 
 .chart-btn:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow); /* Use CSS variable */
+  box-shadow: var(--shadow);
 }
 
 .chart-selector-card {
   border-radius: 8px;
-  box-shadow: var(--shadow); /* Use CSS variable */
-  background-color: var(--light-color); /* Use CSS variable */
+  box-shadow: var(--shadow);
+  background-color: var(--light-color);
 }
 
 .chart-wrapper {
@@ -336,12 +329,11 @@ code {
 
 .chart-title h3 {
   font-size: 1.5rem;
-  color: var(--text-color); /* Use CSS variable */
+  color: var(--text-color);
   margin: 0;
   padding: 0;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .container {
     padding: 10px;

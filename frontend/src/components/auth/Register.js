@@ -26,7 +26,7 @@ const Register = ({ onLoginSuccess }) => {
 
     try {
       await AuthService.register(username, password);
-      setSuccess("Registration successful! Logging you in..."); // Provide feedback
+      setSuccess("Registration successful! Logging you in...");
 
       try {
         await AuthService.login(username, password);
@@ -95,14 +95,12 @@ const Register = ({ onLoginSuccess }) => {
                     required
                   />
                 </Form.Group>
-
                 <div className="d-grid gap-2">
                   <Button variant="primary" type="submit" disabled={loading}>
                     {loading ? "Registering..." : "Register"}
                   </Button>
                 </div>
               </Form>
-
               <div className="mt-3 text-center">
                 <span>Already have an account? </span>
                 <Link to="/login">Login here</Link>

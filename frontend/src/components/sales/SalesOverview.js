@@ -59,7 +59,6 @@ const SalesOverview = () => {
     }
   };
 
-  // Function to export chart data
   const exportChartData = () => {
     let dataToExport;
     let filename;
@@ -90,7 +89,6 @@ const SalesOverview = () => {
         return;
     }
 
-    // Convert to CSV
     const headers = Object.keys(dataToExport[0]);
     const csvContent = [
       headers.join(","),
@@ -99,7 +97,6 @@ const SalesOverview = () => {
       ),
     ].join("\n");
 
-    // Create download link
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

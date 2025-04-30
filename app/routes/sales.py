@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 import json
 import os
-from auth import auth  # Import auth from the auth module
+from auth import auth
 
 sales_bp = Blueprint('sales', __name__)
 
@@ -14,21 +14,18 @@ def read_sales_db():
         return json.load(f)
 
 @sales_bp.route('/sales', methods=['GET'])
-@auth.login_required  # Add authentication requirement
+@auth.login_required
 def get_sales():
     country = request.args.get('country')
     model = request.args.get('model')
     sale_year = request.args.get('sale_year')
     release_year = request.args.get('release_year')
     
-    # Get pagination parameters, with a default that effectively disables pagination
-    # if no specific page/limit is requested
     page = int(request.args.get('page', 1))
-    limit = int(request.args.get('limit', 1000))  # Default to a high number
+    limit = int(request.args.get('limit', 1000))
     
     sales = read_sales_db()
 
-    # Filter by parameters if provided
     if country:
         sales = [sale for sale in sales if sale['country'].lower() == country.lower()]
     if model:
@@ -47,7 +44,6 @@ def get_sales():
         except ValueError:
             return jsonify({"error": "Invalid release_year format. Please provide a valid integer."}), 400
 
-    # Apply pagination only if a reasonable limit is set
     if limit < 1000:
         start = (page - 1) * limit
         end = start + limit

@@ -3,7 +3,6 @@ import AuthService from "./AuthService";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-// Simple cache implementation
 const cache = {
   data: {},
   timeout: {},
@@ -13,12 +12,10 @@ const cache = {
   set: function (key, value, expirationInMinutes = 5) {
     this.data[key] = value;
 
-    // Clear any existing timeout
     if (this.timeout[key]) {
       clearTimeout(this.timeout[key]);
     }
 
-    // Set expiration
     this.timeout[key] = setTimeout(() => {
       delete this.data[key];
       delete this.timeout[key];
@@ -31,13 +28,11 @@ const cache = {
   },
 };
 
-// Helper function to get auth header
 const getAuthHeader = () => {
   return AuthService.getAuthHeader();
 };
 
 class CarService {
-  // Helper method to handle API requests
   static async apiRequest(method, url, data = null, useCache = false) {
     const cacheKey = `${method}-${url}-${JSON.stringify(data)}`;
     const headers = {
@@ -45,7 +40,6 @@ class CarService {
       ...getAuthHeader()
     };
     
-    // Return cached data if available and requested
     if (useCache && method.toLowerCase() === "get") {
       const cachedData = cache.get(cacheKey);
       if (cachedData) {
@@ -58,11 +52,10 @@ class CarService {
         method,
         url: `${API_URL}${url}`,
         data,
-        headers  // Use the headers object we created earlier
+        headers
       };
       const response = await axios(config);
 
-      // Cache GET responses if requested
       if (useCache && method.toLowerCase() === "get") {
         cache.set(cacheKey, response.data);
       }
@@ -71,7 +64,6 @@ class CarService {
     } catch (error) {
       console.error(`Error in ${method} request to ${url}:`, error);
 
-      // Enhanced error handling
       if (error.response) {
         const errorObj = new Error(error.response.data.error || "Server error");
         errorObj.status = error.response.status;
@@ -105,17 +97,17 @@ class CarService {
   }
 
   static createCar(car) {
-    cache.clear(); // Clear cache after data modification
+    cache.clear();
     return this.apiRequest("post", "/cars", car);
   }
 
   static updateCar(id, car) {
-    cache.clear(); // Clear cache after data modification
+    cache.clear();
     return this.apiRequest("put", `/cars/${id}`, car);
   }
 
   static deleteCar(id) {
-    cache.clear(); // Clear cache after data modification
+    cache.clear();
     return this.apiRequest("delete", `/cars/${id}`);
   }
 

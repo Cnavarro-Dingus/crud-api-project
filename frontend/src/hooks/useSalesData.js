@@ -11,7 +11,6 @@ export const useSalesData = (topModelsCount) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filters
   const [selectedYear, setSelectedYear] = useState("all");
   const [selectedContinent, setSelectedContinent] = useState("all");
   const [selectedMake, setSelectedMake] = useState("all");
@@ -43,7 +42,6 @@ export const useSalesData = (topModelsCount) => {
 
         setAllSalesData(sales);
 
-        // Convert years to strings when creating the array
         const years = [...new Set(sales.map((sale) => String(sale.sale_year)))].sort();
         const makes = [...new Set(sales.map((sale) => sale.make))].sort();
         const continentSet = new Set();
@@ -70,26 +68,22 @@ export const useSalesData = (topModelsCount) => {
     fetchSalesData();
   }, [processData]);
 
-  // Process data whenever filters change
   useEffect(() => {
     if (allSalesData.length > 0) {
       let filteredData = [...allSalesData];
 
-      // Apply year filter if not "all"
       if (selectedYear !== "all") {
         filteredData = filteredData.filter(
           (sale) => String(sale.sale_year) === selectedYear
         );
       }
 
-      // Apply continent filter if not "all"
       if (selectedContinent !== "all") {
         filteredData = filteredData.filter((sale) => {
           return getContinentFromCountry(sale.country) === selectedContinent;
         });
       }
 
-      // Apply make filter if not "all"
       if (selectedMake !== "all") {
         filteredData = filteredData.filter(
           (sale) => sale.make === selectedMake

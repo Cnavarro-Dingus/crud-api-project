@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 import json
 import os
 import re
-from auth import auth  # Import auth from the auth module
+from auth import auth
 
 cars_bp = Blueprint('cars', __name__)
 
@@ -25,25 +25,20 @@ def write_db(data):
         json.dump(data, f, indent=4)
 
 def validate_car_data(car_data, cars):
-    # Validate that the car does not already exist (by model and year)
     for car in cars:
         if car['model'] == car_data['model'] and car['year'] == car_data['year'] and car['id'] != car_data['id']:
             return "Car with the same model and year already exists."
 
-    # Validate that 'model' starts with an uppercase letter and contains only letters, numbers, spaces, or hyphens
     if not re.match(r'^[A-Z][A-Za-z0-9\s-]*$', car_data['model']):
         return "Model must start with an uppercase letter and contain only letters, numbers, spaces, or hyphens."
 
-    # Validate that 'make' contains only letters and starts with an uppercase letter
     if not re.match(r'^[A-Z][a-zA-Z\s-]*$', car_data['make']):
         return "Make must start with an uppercase letter and contain only letters."
 
-    # Validate that 'year' is numeric and within the range 1886 to 2026
     try:
         year = int(car_data['year'])
         if not (1886 <= year <= 2026):
             return "Year must be a numeric value between 1886 and 2026."
-        # Update the year to ensure it's an integer in the data
         car_data['year'] = year
     except (ValueError, TypeError):
         return "Year must be a numeric value between 1886 and 2026."
@@ -59,14 +54,11 @@ def get_cars():
 
     cars = read_db()
 
-    # Filter by model if provided
     if model:
         cars = [car for car in cars if model in car['model'].lower()]
 
-    # Calculate total count before pagination
     total_count = len(cars)
 
-    # Apply pagination
     start = (page - 1) * limit
     end = start + limit
     paginated_cars = cars[start:end]
@@ -79,17 +71,18 @@ def create_car():
     new_car = request.json
     cars = read_db()
 
-    # Validate the car data
     error = validate_car_data(new_car, cars)
     if error:
         return jsonify({'error': error}), 400
 
-    # Assign a unique ID to the new car
     new_car['id'] = max(car['id'] for car in cars) + 1 if cars else 0
 
     cars.append(new_car)
     write_db(cars)
     return jsonify(new_car), 201
+
+from routes.reviews import read_reviews_db
+from auth import auth
 
 @cars_bp.route('/cars/<int:car_id>', methods=['GET'])
 @auth.login_required
@@ -97,6 +90,16 @@ def get_car_by_id(car_id):
     cars = read_db()
     car = next((car for car in cars if car['id'] == car_id), None)
     if car:
+        all_reviews = read_reviews_db()
+        car_reviews = [review for review in all_reviews if review['car_id'] == car_id]
+        
+        if car_reviews:
+            average_rating = sum(review['rating'] for review in car_reviews) / len(car_reviews)
+            car['average_rating'] = round(average_rating, 1) 
+        else:
+            car['average_rating'] = None
+            
+        car['reviews'] = car_reviews
         return jsonify(car), 200
     return jsonify({'error': 'Car not found'}), 404
 
@@ -106,20 +109,16 @@ def update_car(car_id):
     updated_car = request.json
     cars = read_db()
 
-    # Validate that the car exists
     car_to_update = next((car for car in cars if car['id'] == car_id), None)
     if not car_to_update:
         return jsonify({'error': 'Car not found'}), 404
 
-    # Preserve the car ID
     updated_car['id'] = car_id
 
-    # Validate the car data
     error = validate_car_data(updated_car, cars)
     if error:
         return jsonify({'error': error}), 400
 
-    # Update the car data, including features
     cars = [updated_car if car['id'] == car_id else car for car in cars]
     write_db(cars)
     return jsonify(updated_car), 200

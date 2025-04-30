@@ -50,7 +50,7 @@ const EditCar = () => {
   return (
     <div className="fade-in">
       <div className="mb-4 text-end">
-        <Link to="/" className="btn btn-secondary"> {/* Updated button styling */}
+        <Link to="/" className="btn btn-secondary">
           <FaArrowLeft className="me-2" /> Back to Cars
         </Link>
       </div>
@@ -59,7 +59,7 @@ const EditCar = () => {
       
       {loading ? (
         <div className="text-center py-5">
-          <Spinner animation="border" role="status" variant="primary" aria-label="Loading" /> {/* Added ARIA label */}
+          <Spinner animation="border" role="status" variant="primary" aria-label="Loading" />
           <p className="mt-3">Loading car data...</p>
         </div>
       ) : error ? (

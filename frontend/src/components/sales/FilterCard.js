@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
 import { Card, Form, Row, Col } from "react-bootstrap";
 import { FaFilter } from "react-icons/fa";
 
@@ -30,7 +30,7 @@ const FilterCard = ({
               <Form.Select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                aria-label="Select Year" // Add ARIA label
+                aria-label="Select Year"
               >
                 <option value="all">All Years</option>
                 {availableYears.map((year) => (
@@ -66,7 +66,7 @@ const FilterCard = ({
               <Form.Select
                 value={selectedMake}
                 onChange={(e) => setSelectedMake(e.target.value)}
-                aria-label="Select Make" // Add ARIA label
+                aria-label="Select Make"
               >
                 <option value="all">All Makes</option>
                 {availableMakes.map((make) => (
@@ -86,7 +86,7 @@ const FilterCard = ({
                 <Form.Select
                   value={topModelsCount}
                   onChange={(e) => setTopModelsCount(parseInt(e.target.value))}
-                  aria-label="Select Top Models Count" // Add ARIA label
+                  aria-label="Select Top Models Count"
                 >
                   <option value="10">Top 10</option>
                   <option value="20">Top 20</option>
@@ -102,7 +102,6 @@ const FilterCard = ({
   );
 };
 
-// Add PropTypes for validation
 FilterCard.propTypes = {
   selectedYear: PropTypes.string.isRequired,
   setSelectedYear: PropTypes.func.isRequired,
@@ -118,4 +117,4 @@ FilterCard.propTypes = {
   setTopModelsCount: PropTypes.func.isRequired,
 };
 
-export default React.memo(FilterCard); // Use React.memo for performance optimization
+export default React.memo(FilterCard);

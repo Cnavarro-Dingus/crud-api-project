@@ -8,7 +8,6 @@ const ConfirmationModal = ({
   message,
   title = "Confirm Action",
 }) => {
-  // Handle keyboard events
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!show) return;
@@ -22,7 +21,7 @@ const ConfirmationModal = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [show, onHide, onConfirm]); // Ensure dependencies are correct
+  }, [show, onHide, onConfirm]);
 
   return (
     <Modal
@@ -31,10 +30,10 @@ const ConfirmationModal = ({
       centered
       backdrop="static"
       keyboard={false}
-      aria-labelledby="confirmation-modal-title" // Added ARIA label
+      aria-labelledby="confirmation-modal-title"
     >
       <Modal.Header closeButton>
-        <Modal.Title id="confirmation-modal-title">{title}</Modal.Title> {/* Added ARIA label */}
+        <Modal.Title id="confirmation-modal-title">{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>{message}</p>

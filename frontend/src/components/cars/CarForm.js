@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Card } from "react-bootstrap";
-import { useFeatures } from "../../hooks/useFeatures"; // Import custom hook
-import { validateCar } from "../../utils/validateCar"; // Import validation utility
+import { useFeatures } from "../../hooks/useFeatures";
+import { validateCar } from "../../utils/validateCar";
 
 const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
   const [car, setCar] = useState(initialCar);
@@ -15,7 +15,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     setErrors,
   } = useFeatures(initialCar.features);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCar({ ...car, [name]: value });
@@ -24,7 +23,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
     }
   };
 
-  // Handle Enter key in feature input
   const handleFeatureKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -51,7 +49,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="text"
               name="make"
               value={car.make}
-              onChange={handleChange} // Ensure handleChange is used here
+              onChange={handleChange}
               isInvalid={!!errors.make}
               placeholder="Enter car make (e.g., Toyota)"
             />
@@ -66,7 +64,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="text"
               name="model"
               value={car.model}
-              onChange={handleChange} // Ensure handleChange is used here
+              onChange={handleChange}
               isInvalid={!!errors.model}
               placeholder="Enter car model (e.g., Corolla, Civic)"
             />
@@ -81,7 +79,7 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               type="number"
               name="year"
               value={car.year}
-              onChange={handleChange} // Ensure handleChange is used here
+              onChange={handleChange}
               isInvalid={!!errors.year}
               placeholder="Enter car year (e.g., 2023)"
               min="1900"
@@ -143,7 +141,6 @@ const CarForm = ({ initialCar, onSubmit, error, loading, navigate }) => {
               </div>
             )}
           </Form.Group>
-          {/* ... existing form fields ... */}
         </Form>
       </Card.Body>
     </Card>
