@@ -76,7 +76,6 @@ const AddReviewForm = ({ carId, onReviewAdded }) => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Share your thoughts about this car..."
-              required
             />
           </Form.Group>
           <Button type="submit" variant="primary" disabled={loading}>

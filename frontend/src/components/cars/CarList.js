@@ -8,7 +8,7 @@ import {
   FaBackspace,
   FaPencilRuler,
   FaInfoCircle,
-  FaStar,
+  FaBookmark,
 } from "react-icons/fa";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import CarDetailsModal from "../modals/CarDetailsModal";
@@ -221,7 +221,7 @@ const CarList = () => {
                   <Card.Body className="d-flex flex-column">
                     <Card.Title>
                       {car.make} {car.model}
-                      <FaStar
+                      <FaBookmark
                         className={`favorite-star ${
                           favorites[car.id] ? "star-favorite" : "star"
                         }`}

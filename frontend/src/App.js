@@ -25,7 +25,7 @@ import {
   FaChartBar,
   FaSignOutAlt,
   FaUser,
-  FaStar,
+  FaBookmark,
 } from "react-icons/fa";
 
 function AppContent() {
@@ -93,7 +93,7 @@ function AppContent() {
                     </NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item as={Link} to="/favorites">
-                      <FaStar className="me-1" /> My Favorite Cars
+                      <FaBookmark className="me-1" /> My Favorite Cars
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleLogout}>
                       <FaSignOutAlt className="me-1" /> Logout

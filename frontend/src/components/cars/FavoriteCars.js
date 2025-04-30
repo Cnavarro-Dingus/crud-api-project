@@ -5,7 +5,7 @@ import {
   FaChartBar,
   FaPencilRuler,
   FaInfoCircle,
-  FaStar,
+  FaBookmark,
   FaArrowLeft,
   FaBackspace,
 } from "react-icons/fa";
@@ -139,7 +139,7 @@ const FavoriteCars = () => {
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>
                     {car.make} {car.model}
-                    <FaStar
+                    <FaBookmark
                       className="favorite-star star-favorite"
                       onClick={() => handleRemoveFromFavorites(car.id)}
                     />

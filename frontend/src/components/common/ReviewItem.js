@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Card, Button, Form, Alert, Spinner, Modal } from "react-bootstrap";
 import {
   FaEdit,
   FaTrash,
@@ -21,20 +21,19 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
   const [editedRating, setEditedRating] = useState(review.rating);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
-      setLoading(true);
-      setError("");
-      try {
-        await ReviewService.deleteReview(review.id);
-        onUpdate();
-      } catch (err) {
-        setError("Failed to delete review. Please try again.");
-        console.error("Delete review error:", err);
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true);
+    setError("");
+    try {
+      await ReviewService.deleteReview(review.id);
+      onUpdate();
+    } catch (err) {
+      setError("Failed to delete review. Please try again.");
+      console.error("Delete review error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,6 +64,8 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
   };
 
   const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    date.setHours(date.getHours() + 2);
     const options = {
       year: "numeric",
       month: "long",
@@ -72,7 +73,7 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
       hour: "2-digit",
       minute: "2-digit",
     };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, options);
   };
 
   return (
@@ -142,7 +143,7 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
           </Form>
         ) : (
           <>
-            <div className="d-flex justify-content-between align-items-start mb-2">
+            <div className="d-flex justify-content-between align-items-start mb-2 review-header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', minHeight: '60px'}}>
               <div>
                 <div className="d-flex align-items-center mb-1">
                   <FaUserCircle size={20} className="me-2 text-muted" />
@@ -151,27 +152,27 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
                 </div>
                 <small className="text-muted">
                   Posted: {formatDate(review.created_at)}
-                  {review.updated_at !== review.created_at &&
-                    ` (Edited: ${formatDate(review.updated_at)})`}
                 </small>
               </div>
               {isAuthor && (
-                <div className="review-actions">
+                <div className="review-actions" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', minWidth: '48px'}}>
                   <Button
                     variant="outline-secondary"
                     size="sm"
                     onClick={() => setIsEditing(true)}
                     className="me-1"
                     title="Edit Review"
+                    style={{ backgroundColor: '#007bff', color: '#fff' }}
                   >
                     <FaEdit />
                   </Button>
                   <Button
                     variant="outline-danger"
                     size="sm"
-                    onClick={handleDelete}
+                    onClick={() => setShowDeleteModal(true)}
                     disabled={loading}
                     title="Delete Review"
+                    style={{ backgroundColor: '#dc3545', color: '#fff' }}
                   >
                     {loading ? (
                       <Spinner as="span" animation="border" size="sm" />
@@ -185,9 +186,51 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
             <Card.Text>{review.text}</Card.Text>
           </>
         )}
+
+        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} style={{ marginLeft: '-7px'}} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Delete</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete this review?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleDelete} disabled={loading}>
+              {loading ? (
+                <Spinner as="span" animation="border" size="sm" />
+              ) : (
+                "Delete"
+              )}
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Card.Body>
     </Card>
   );
 };
 
 export default ReviewItem;
+
+<style>{`
+  .review-header {
+    min-height: 60px;
+    align-items: flex-start;
+  }
+  .review-header > div:first-child {
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .review-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 48px;
+    height: 40px;
+  }
+`}</style>

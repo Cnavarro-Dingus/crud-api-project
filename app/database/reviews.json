@@ -1,11 +1,38 @@
 [
-  {
-    "id": 1,
-    "car_id": 4,
-    "user_username": "cris",
-    "text": "asasas",
-    "rating": 4,
-    "created_at": "2025-04-30T08:17:19.401382",
-    "updated_at": "2025-04-30T08:17:19.401382"
-  }
+    {
+        "id": 1,
+        "car_id": 4,
+        "user_username": "cris",
+        "text": "asasas",
+        "rating": 4,
+        "created_at": "2025-04-30T08:30:41.764367",
+        "updated_at": "2025-04-30T09:26:31.583011"
+    },
+    {
+        "id": 2,
+        "car_id": 4,
+        "user_username": "cris",
+        "text": "asas",
+        "rating": 3,
+        "created_at": "2025-04-30T09:34:26.782352",
+        "updated_at": "2025-04-30T09:38:57.475679"
+    },
+    {
+        "id": 3,
+        "car_id": 4,
+        "user_username": "cris",
+        "text": "asasas",
+        "rating": 1,
+        "created_at": "2025-04-30T09:34:33.693980",
+        "updated_at": "2025-04-30T09:34:33.693980"
+    },
+    {
+        "id": 4,
+        "car_id": 4,
+        "user_username": "cris",
+        "text": "asasas",
+        "rating": 3,
+        "created_at": "2025-04-30T09:36:32.701920",
+        "updated_at": "2025-04-30T09:36:32.701920"
+    }
 ]
