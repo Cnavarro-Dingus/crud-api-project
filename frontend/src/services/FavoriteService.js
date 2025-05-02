@@ -8,13 +8,11 @@ const pendingOperations = new Map();
 const FavoriteService = {
   getFavorites: async () => {
     try {
-      const currentUser = AuthService.getCurrentUser();
-      if (!currentUser) return [];
+      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
+      if (!authHeader || !authHeader.Authorization) return []; // Verificar si hay cabecera
 
       const response = await axios.get(`${API_URL}/favorites`, {
-        headers: {
-          Authorization: currentUser.authHeader,
-        },
+        headers: authHeader, // Usar la cabecera obtenida
       });
 
       return response.data;
@@ -26,15 +24,15 @@ const FavoriteService = {
 
   addFavorite: async (car) => {
     try {
-      const currentUser = AuthService.getCurrentUser();
-      if (!currentUser) return false;
+      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
+      if (!authHeader || !authHeader.Authorization) return false; // Verificar si hay cabecera
 
       const operationKey = `add-${car.id}`;
       pendingOperations.set(operationKey, true);
 
       await axios.post(`${API_URL}/favorites`, car, {
         headers: {
-          Authorization: currentUser.authHeader,
+          ...authHeader, // Usar la cabecera obtenida
           "Content-Type": "application/json",
         },
       });
@@ -51,16 +49,14 @@ const FavoriteService = {
 
   removeFavorite: async (carId) => {
     try {
-      const currentUser = AuthService.getCurrentUser();
-      if (!currentUser) return false;
+      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
+      if (!authHeader || !authHeader.Authorization) return false; // Verificar si hay cabecera
 
       const operationKey = `remove-${carId}`;
       pendingOperations.set(operationKey, true);
 
       await axios.delete(`${API_URL}/favorites/${carId}`, {
-        headers: {
-          Authorization: currentUser.authHeader,
-        },
+        headers: authHeader, // Usar la cabecera obtenida
       });
 
       pendingOperations.delete(operationKey);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,27 +27,70 @@ import {
   FaUser,
   FaBookmark,
 } from "react-icons/fa";
+import { Spinner } from "react-bootstrap"; // Import Spinner
 
 function AppContent() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    AuthService.isAuthenticated()
-  );
-  const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
+  // Initialize state assuming not authenticated initially
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
   // Estados para paginación y ordenado globales
   const [resetPagination, setResetPagination] = useState(false);
   const [resetSort, setResetSort] = useState(false);
 
-  const handleAuthChange = () => {
-    setIsAuthenticated(AuthService.isAuthenticated());
-    setCurrentUser(AuthService.getCurrentUser());
+  // Effect to check auth status on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const authStatus = await AuthService.isAuthenticated();
+        setIsAuthenticated(authStatus);
+        if (authStatus) {
+          const user = await AuthService.getCurrentUser();
+          setCurrentUser(user);
+        }
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
+        // Handle error appropriately, maybe logout
+        await AuthService.logout();
+        setIsAuthenticated(false);
+        setCurrentUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const handleAuthChange = async () => {
+    // Make async to await service calls
+    try {
+      const authStatus = await AuthService.isAuthenticated();
+      setIsAuthenticated(authStatus);
+      if (authStatus) {
+        const user = await AuthService.getCurrentUser();
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    } catch (error) {
+      console.error("Error handling auth change:", error);
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+    }
   };
 
-  const handleLogout = () => {
-    AuthService.logout();
-    setIsAuthenticated(false);
-    setCurrentUser(null);
-    navigate("/login");
+  const handleLogout = async () => {
+    // Make async
+    try {
+      await AuthService.logout();
+      setIsAuthenticated(false);
+      setCurrentUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Optionally handle logout error display
+    }
   };
 
   // Nuevo manejador para Home
@@ -57,6 +100,17 @@ function AppContent() {
     setResetSort(true);
     navigate("/");
   };
+
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
@@ -186,7 +240,7 @@ function AppContent() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </Container>
     </div>

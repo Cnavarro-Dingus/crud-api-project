@@ -27,17 +27,13 @@ const cache = {
     this.timeout = {};
   },
 };
-
-const getAuthHeader = () => {
-  return AuthService.getAuthHeader();
-};
-
 class CarService {
   static async apiRequest(method, url, data = null, useCache = false) {
     const cacheKey = `${method}-${url}-${JSON.stringify(data)}`;
+    const authHeader = await AuthService.getAuthHeader(); // Esperar la cabecera
     const headers = {
       "Content-Type": "application/json",
-      ...getAuthHeader(),
+      ...authHeader, // Usar la cabecera obtenida
     };
 
     if (useCache && method.toLowerCase() === "get") {
