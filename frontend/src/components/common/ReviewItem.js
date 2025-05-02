@@ -149,7 +149,15 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
           </Form>
         ) : (
           <>
-            <div className="d-flex justify-content-between align-items-start mb-2 review-header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', minHeight: '60px'}}>
+            <div
+              className="d-flex justify-content-between align-items-start mb-2 review-header"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                minHeight: "60px",
+              }}
+            >
               <div>
                 <div className="d-flex align-items-center mb-1">
                   <FaUserCircle size={20} className="me-2 text-muted" />
@@ -161,14 +169,23 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
                 </small>
               </div>
               {isAuthor && (
-                <div className="review-actions" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', minWidth: '48px'}}>
+                <div
+                  className="review-actions"
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: "8px",
+                    minWidth: "48px",
+                  }}
+                >
                   <Button
                     variant="outline-secondary"
                     size="sm"
                     onClick={() => setIsEditing(true)}
                     className="me-1"
                     title="Edit Review"
-                    style={{ backgroundColor: '#007bff', color: '#fff' }}
+                    style={{ backgroundColor: "#007bff", color: "#fff" }}
                   >
                     <FaEdit />
                   </Button>
@@ -178,7 +195,7 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
                     onClick={() => setShowDeleteModal(true)}
                     disabled={loading}
                     title="Delete Review"
-                    style={{ backgroundColor: '#dc3545', color: '#fff' }}
+                    style={{ backgroundColor: "#dc3545", color: "#fff" }}
                   >
                     {loading ? (
                       <Spinner as="span" animation="border" size="sm" />
@@ -193,15 +210,21 @@ const ReviewItem = ({ review, carId, onUpdate }) => {
           </>
         )}
 
-        <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} style={{ marginLeft: '-7px'}} centered>
+        <Modal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          style={{ marginLeft: "-7px" }}
+          centered
+        >
           <Modal.Header closeButton>
             <Modal.Title>Confirm Delete</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Are you sure you want to delete this review?
-          </Modal.Body>
+          <Modal.Body>Are you sure you want to delete this review?</Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
               Cancel
             </Button>
             <Button variant="danger" onClick={handleDelete} disabled={loading}>
@@ -239,4 +262,4 @@ export default ReviewItem;
     min-width: 48px;
     height: 40px;
   }
-`}</style>
+`}</style>;

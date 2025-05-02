@@ -51,9 +51,8 @@ def get_cars():
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 6))
     model = request.args.get('model', '').lower()
-    sort_by = request.args.get('sort_by', '').lower()  # nombre, año, rating
-    sort_dir = request.args.get('sort_dir', 'asc').lower()  # asc o desc
-    # Normalizar sort_by para aceptar 'name' como sinónimo de 'nombre'
+    sort_by = request.args.get('sort_by', '').lower()
+    sort_dir = request.args.get('sort_dir', 'asc').lower()
     if sort_by == 'name':
         sort_by = 'nombre'
 
@@ -62,7 +61,6 @@ def get_cars():
     if model:
         cars = [car for car in cars if model in car['model'].lower()]
 
-    # Calcular average_rating para cada coche antes de ordenar
     from routes.reviews import read_reviews_db
     all_reviews = read_reviews_db()
     for car in cars:
@@ -73,7 +71,6 @@ def get_cars():
         else:
             car['average_rating'] = None
 
-    # Lógica de ordenación
     if sort_by == 'nombre':
         cars = sorted(cars, key=lambda x: (x.get('make') or '').lower(), reverse=(sort_dir=='desc'))
     elif sort_by == 'año':

@@ -8,11 +8,11 @@ const pendingOperations = new Map();
 const FavoriteService = {
   getFavorites: async () => {
     try {
-      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
-      if (!authHeader || !authHeader.Authorization) return []; // Verificar si hay cabecera
+      const authHeader = await AuthService.getAuthHeader();
+      if (!authHeader || !authHeader.Authorization) return [];
 
       const response = await axios.get(`${API_URL}/favorites`, {
-        headers: authHeader, // Usar la cabecera obtenida
+        headers: authHeader,
       });
 
       return response.data;
@@ -24,15 +24,15 @@ const FavoriteService = {
 
   addFavorite: async (car) => {
     try {
-      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
-      if (!authHeader || !authHeader.Authorization) return false; // Verificar si hay cabecera
+      const authHeader = await AuthService.getAuthHeader();
+      if (!authHeader || !authHeader.Authorization) return false;
 
       const operationKey = `add-${car.id}`;
       pendingOperations.set(operationKey, true);
 
       await axios.post(`${API_URL}/favorites`, car, {
         headers: {
-          ...authHeader, // Usar la cabecera obtenida
+          ...authHeader,
           "Content-Type": "application/json",
         },
       });
@@ -49,14 +49,14 @@ const FavoriteService = {
 
   removeFavorite: async (carId) => {
     try {
-      const authHeader = await AuthService.getAuthHeader(); // Obtener cabecera asíncronamente
-      if (!authHeader || !authHeader.Authorization) return false; // Verificar si hay cabecera
+      const authHeader = await AuthService.getAuthHeader();
+      if (!authHeader || !authHeader.Authorization) return false;
 
       const operationKey = `remove-${carId}`;
       pendingOperations.set(operationKey, true);
 
       await axios.delete(`${API_URL}/favorites/${carId}`, {
-        headers: authHeader, // Usar la cabecera obtenida
+        headers: authHeader,
       });
 
       pendingOperations.delete(operationKey);

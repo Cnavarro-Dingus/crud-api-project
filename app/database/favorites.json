@@ -1,11 +1,7 @@
 {
   "cristian": [
     {
-      "features": [
-        "Panoramic Roof",
-        "Luxury Package",
-        "Convenience Package"
-      ],
+      "features": ["Panoramic Roof", "Luxury Package", "Convenience Package"],
       "id": 2,
       "make": "Mercedes-Benz",
       "model": "GLC",
@@ -27,9 +23,7 @@
       "year": 1997
     },
     {
-      "features": [
-        "Wireless Charging"
-      ],
+      "features": ["Wireless Charging"],
       "id": 5,
       "make": "Cadillac",
       "model": "CT4",

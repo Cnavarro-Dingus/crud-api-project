@@ -1,12 +1,11 @@
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-const CACHE_NAME = 'auth-cache';
-const AUTH_KEY = 'user-auth-data';
-const TOKEN_EXPIRATION_MINUTES = 60; // Token expira en 60 minutos
+const CACHE_NAME = "auth-cache";
+const AUTH_KEY = "user-auth-data";
+const TOKEN_EXPIRATION_MINUTES = 120;
 
 class AuthService {
-
   static async _getCache() {
     return await caches.open(CACHE_NAME);
   }
@@ -19,9 +18,8 @@ class AuthService {
 
       const data = await response.json();
 
-      // Verificar expiración
       if (data.expiresAt && Date.now() > data.expiresAt) {
-        await cache.delete(AUTH_KEY); // Eliminar si ha expirado
+        await cache.delete(AUTH_KEY);
         return null;
       }
       return data;
@@ -78,7 +76,6 @@ class AuthService {
 
       return { message: "Login successful", username };
     } catch (error) {
-      // Asegurarse de limpiar la caché en caso de fallo de login
       try {
         const cache = await this._getCache();
         await cache.delete(AUTH_KEY);

@@ -17,7 +17,12 @@ import PaginationComponent from "../common/PaginationComponent";
 import FavoriteService from "../../services/FavoriteService";
 import StarRating from "../common/StarRating";
 
-const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort }) => {
+const CarList = ({
+  resetPagination,
+  setResetPagination,
+  resetSort,
+  setResetSort,
+}) => {
   const [cars, setCars] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -35,7 +40,6 @@ const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort 
   const [favorites, setFavorites] = useState({});
   const [sortOption, setSortOption] = useState("");
 
-  // Reiniciar la paginación cuando cambie el filtro de orden
   useEffect(() => {
     setCurrentPage(1);
   }, [sortOption]);
@@ -57,7 +61,6 @@ const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort 
     loadFavorites();
   }, []);
 
-  // Function to map sortOption to sort_by and sort_dir
   const getSortParams = (option) => {
     switch (option) {
       case "name_asc":
@@ -181,40 +184,35 @@ const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort 
   const handleReviewUpdate = async () => {
     if (selectedCar) {
       try {
-        // Obtener los datos actualizados del coche, incluyendo la nueva valoración media
         const updatedCarData = await CarService.getCarById(selectedCar.id);
-        setSelectedCar(updatedCarData); // Actualizar el coche seleccionado en el modal
+        setSelectedCar(updatedCarData);
 
-        // Actualizar la lista de coches en el estado local
-        setCars(prevCars => {
-          const updatedCars = prevCars.map(car => 
-            car.id === selectedCar.id 
+        setCars((prevCars) => {
+          const updatedCars = prevCars.map((car) =>
+            car.id === selectedCar.id
               ? { ...car, average_rating: updatedCarData.average_rating } // Actualizar solo la valoración media del coche modificado
               : car
           );
 
-          // Si la ordenación actual es por valoración, reordenar la lista
-          if (sortOption === 'rating_asc' || sortOption === 'rating_desc') {
+          if (sortOption === "rating_asc" || sortOption === "rating_desc") {
             const { sort_dir } = getSortParams(sortOption);
             return [...updatedCars].sort((a, b) => {
               const valA = parseFloat(a.average_rating) || 0;
               const valB = parseFloat(b.average_rating) || 0;
-              if (sort_dir === 'asc') {
+              if (sort_dir === "asc") {
                 return valA - valB;
               } else {
                 return valB - valA;
               }
             });
           }
-          
-          return updatedCars; // Devolver la lista actualizada sin reordenar si no se ordena por valoración
-        });
 
+          return updatedCars;
+        });
       } catch (err) {
         setError("Failed to refresh car details after review update.");
         console.error("Error refetching car details:", err);
       } finally {
-        // No es necesario hacer nada en finally aquí
       }
     }
   };
@@ -240,7 +238,12 @@ const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort 
       <h2 className="page-title">Car List</h2>
 
       <div className="mb-4 slide-in">
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} sortOption={sortOption} setSortOption={setSortOption} />
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+        />
       </div>
 
       {deleteMessage && (
@@ -312,13 +315,16 @@ const CarList = ({ resetPagination, setResetPagination, resetSort, setResetSort 
                       </span>
                     </Card.Text>
                     <div className="mb-2 average-rating">
-                      {car.average_rating !== null && car.average_rating !== undefined ? (
+                      {car.average_rating !== null &&
+                      car.average_rating !== undefined ? (
                         <>
-                        <strong>Average Rating: </strong>
+                          <strong>Average Rating: </strong>
                           <span style={{ verticalAlign: "middle" }}>
                             <StarRating rating={car.average_rating} />
                           </span>
-                          <span style={{ marginLeft: 4 }}>{car.average_rating.toFixed(1)}/5</span>
+                          <span style={{ marginLeft: 4 }}>
+                            {car.average_rating.toFixed(1)}/5
+                          </span>
                         </>
                       ) : (
                         "There are no reviews for this car"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -27,19 +27,16 @@ import {
   FaUser,
   FaBookmark,
 } from "react-icons/fa";
-import { Spinner } from "react-bootstrap"; // Import Spinner
+import { Spinner } from "react-bootstrap";
 
 function AppContent() {
-  // Initialize state assuming not authenticated initially
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  // Estados para paginación y ordenado globales
   const [resetPagination, setResetPagination] = useState(false);
   const [resetSort, setResetSort] = useState(false);
 
-  // Effect to check auth status on mount
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -51,7 +48,6 @@ function AppContent() {
         }
       } catch (error) {
         console.error("Error checking authentication status:", error);
-        // Handle error appropriately, maybe logout
         await AuthService.logout();
         setIsAuthenticated(false);
         setCurrentUser(null);
@@ -63,7 +59,6 @@ function AppContent() {
   }, []);
 
   const handleAuthChange = async () => {
-    // Make async to await service calls
     try {
       const authStatus = await AuthService.isAuthenticated();
       setIsAuthenticated(authStatus);
@@ -81,7 +76,6 @@ function AppContent() {
   };
 
   const handleLogout = async () => {
-    // Make async
     try {
       await AuthService.logout();
       setIsAuthenticated(false);
@@ -89,11 +83,9 @@ function AppContent() {
       navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
-      // Optionally handle logout error display
     }
   };
 
-  // Nuevo manejador para Home
   const handleHomeClick = (e) => {
     e.preventDefault();
     setResetPagination(true);
@@ -101,7 +93,6 @@ function AppContent() {
     navigate("/");
   };
 
-  // Show loading spinner while checking auth
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
@@ -116,7 +107,12 @@ function AppContent() {
     <div className="App">
       <Navbar bg="dark" variant="dark" expand="lg" className="navbar">
         <Container>
-          <Navbar.Brand as={Link} to="/" onClick={handleHomeClick} style={{cursor:'pointer'}}>
+          <Navbar.Brand
+            as={Link}
+            to="/"
+            onClick={handleHomeClick}
+            style={{ cursor: "pointer" }}
+          >
             <FaCar className="me-2" />
             Car App
           </Navbar.Brand>
@@ -195,7 +191,12 @@ function AppContent() {
             path="/"
             element={
               <PrivateRoute>
-                <CarList resetPagination={resetPagination} setResetPagination={setResetPagination} resetSort={resetSort} setResetSort={setResetSort} />
+                <CarList
+                  resetPagination={resetPagination}
+                  setResetPagination={setResetPagination}
+                  resetSort={resetSort}
+                  setResetSort={setResetSort}
+                />
               </PrivateRoute>
             }
           />
@@ -239,7 +240,6 @@ function AppContent() {
               </PrivateRoute>
             }
           />
-
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </Container>

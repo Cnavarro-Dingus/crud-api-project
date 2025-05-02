@@ -30,10 +30,10 @@ const cache = {
 class CarService {
   static async apiRequest(method, url, data = null, useCache = false) {
     const cacheKey = `${method}-${url}-${JSON.stringify(data)}`;
-    const authHeader = await AuthService.getAuthHeader(); // Esperar la cabecera
+    const authHeader = await AuthService.getAuthHeader();
     const headers = {
       "Content-Type": "application/json",
-      ...authHeader, // Usar la cabecera obtenida
+      ...authHeader,
     };
 
     if (useCache && method.toLowerCase() === "get") {
@@ -79,7 +79,13 @@ class CarService {
     }
   }
 
-  static getAllCars(model = "", page = 1, limit = 6, sort_by = "", sort_dir = "asc") {
+  static getAllCars(
+    model = "",
+    page = 1,
+    limit = 6,
+    sort_by = "",
+    sort_dir = "asc"
+  ) {
     const params = [];
     if (model) params.push(`model=${encodeURIComponent(model)}`);
     if (page) params.push(`page=${page}`);
@@ -87,12 +93,7 @@ class CarService {
     if (sort_by) params.push(`sort_by=${encodeURIComponent(sort_by)}`);
     if (sort_dir) params.push(`sort_dir=${encodeURIComponent(sort_dir)}`);
     const queryString = params.length ? `?${params.join("&")}` : "";
-    return this.apiRequest(
-      "get",
-      `/cars${queryString}`,
-      null,
-      true
-    );
+    return this.apiRequest("get", `/cars${queryString}`, null, true);
   }
 
   static getCarById(id) {

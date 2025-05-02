@@ -3,15 +3,12 @@ import os
 import random
 from datetime import datetime
 
-# Define the path to the database files
 DB_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../database'))
 CARS_DB_FILE = os.path.join(DB_DIR, 'db.json')
 SALES_DB_FILE = os.path.join(DB_DIR, 'sales.json')
 
-# Ensure the database directory exists
 os.makedirs(DB_DIR, exist_ok=True)
 
-# Car makes and models
 car_makes_models = {
     "Toyota": ["Corolla", "Camry", "RAV4", "Highlander", "Tacoma", "Prius", "Sienna", "4Runner"],
     "Honda": ["Civic", "Accord", "CR-V", "Pilot", "Odyssey", "Fit", "HR-V", "Ridgeline"],
@@ -56,7 +53,6 @@ car_makes_models = {
     "Bugatti": ["Chiron", "Mistral", "Bolide", "Centodieci", "Divo", "La Voiture Noire", "Veyron", "EB110"]
 }
 
-# Features for cars
 car_features = [
     "Bluetooth", "Navigation", "Leather Seats", "Sunroof", "Backup Camera", 
     "Heated Seats", "Keyless Entry", "Cruise Control", "Lane Departure Warning",
@@ -70,7 +66,6 @@ car_features = [
     "Performance Package", "Cold Weather Package", "Convenience Package", "Safety Package"
 ]
 
-# Countries for sales data
 countries = [
     "United States", "China", "Japan", "Germany", "United Kingdom", "France", "Italy", 
     "Canada", "South Korea", "Australia", "Brazil", "India", "Russia", "Spain", 
@@ -88,11 +83,9 @@ def generate_cars(num_cars=2000):
     for i in range(num_cars):
         make = random.choice(list(car_makes_models.keys()))
         model = random.choice(car_makes_models[make])
-        
-        # Generate a realistic year between 1990 and 2023
+
         year = random.randint(1990, 2023)
-        
-        # Generate 1-5 random features
+
         num_features = random.randint(1, 5)
         features = random.sample(car_features, num_features)
         
@@ -112,17 +105,13 @@ def generate_sales(cars, num_sales=10000):
     sale_id = 0
     
     for _ in range(num_sales):
-        # Pick a random car
         car = random.choice(cars)
-        
-        # Generate sale year (between car year and current year)
+
         current_year = datetime.now().year
         sale_year = random.randint(car["year"], current_year)
-        
-        # Generate random units sold (1-100)
+
         units_sold = random.randint(1, 100)
         
-        # Pick a random country
         country = random.choice(countries)
         
         sales.append({
@@ -146,15 +135,11 @@ def save_to_json(data, file_path):
         json.dump(data, f, indent=4)
 
 def main():
-    # Generate cars - increased to 2000
     print("Generating car data...")
-    cars = generate_cars(2000)  # Generate 2000 cars
     
-    # Generate sales - increased to 10000
     print("Generating sales data...")
-    sales = generate_sales(cars, 10000)  # Generate 10000 sales records
+    sales = generate_sales(cars, 10000)
     
-    # Save to JSON files
     print(f"Saving car data to {CARS_DB_FILE}...")
     save_to_json(cars, CARS_DB_FILE)
     

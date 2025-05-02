@@ -2,7 +2,12 @@ import React from "react";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import { FaSearch, FaTimes } from "react-icons/fa";
 
-const SearchBar = ({ searchTerm, setSearchTerm, sortOption, setSortOption }) => {
+const SearchBar = ({
+  searchTerm,
+  setSearchTerm,
+  sortOption,
+  setSortOption,
+}) => {
   const handleClear = () => {
     setSearchTerm("");
   };
@@ -47,12 +52,14 @@ const SearchBar = ({ searchTerm, setSearchTerm, sortOption, setSortOption }) => 
         <Form.Select
           aria-label="Sort cars"
           value={sortOption}
-          onChange={e => setSortOption(e.target.value)}
+          onChange={(e) => setSortOption(e.target.value)}
           style={{ maxWidth: 220, marginLeft: 8 }}
         >
           <option value="">Sort by...</option>
-          {sortOptions.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          {sortOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Form.Select>
       </InputGroup>
