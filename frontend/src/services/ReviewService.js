@@ -3,15 +3,12 @@ import AuthService from "./AuthService";
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
-const getAuthHeader = () => {
-  return AuthService.getAuthHeader();
-};
-
 class ReviewService {
   static async apiRequest(method, url, data = null) {
+    const authHeader = await AuthService.getAuthHeader();
     const headers = {
       "Content-Type": "application/json",
-      ...getAuthHeader(),
+      ...authHeader,
     };
 
     try {

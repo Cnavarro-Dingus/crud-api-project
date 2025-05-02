@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button, Form, Alert, Spinner, Modal } from "react-bootstrap";
 import {
   FaEdit,
@@ -13,9 +13,15 @@ import ReviewService from "../../services/ReviewService";
 import AuthService from "../../services/AuthService";
 
 const ReviewItem = ({ review, carId, onUpdate }) => {
-  const currentUser = AuthService.getCurrentUser();
-  const isAuthor = currentUser && currentUser.username === review.user_username;
+  const [isAuthor, setIsAuthor] = useState(false);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await AuthService.getCurrentUser();
+      setIsAuthor(user && user.username === review.user_username);
+    };
+    fetchUser();
+  }, [review.user_username]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(review.text);
   const [editedRating, setEditedRating] = useState(review.rating);

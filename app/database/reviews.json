@@ -90,21 +90,21 @@
         "updated_at": "2025-05-02T06:06:28.869941"
     },
     {
-        "id": 18,
-        "car_id": 4,
-        "user_username": "cris",
-        "text": "asasas",
-        "rating": 1,
-        "created_at": "2025-05-02T06:18:02.872369",
-        "updated_at": "2025-05-02T06:18:02.872369"
-    },
-    {
         "id": 19,
         "car_id": 5,
         "user_username": "cris",
-        "text": "asas",
+        "text": "asasas",
         "rating": 1,
         "created_at": "2025-05-02T06:22:39.739569",
-        "updated_at": "2025-05-02T06:22:39.739569"
+        "updated_at": "2025-05-02T07:26:26.921952"
+    },
+    {
+        "id": 20,
+        "car_id": 4,
+        "user_username": "cris",
+        "text": "asasas",
+        "rating": 5,
+        "created_at": "2025-05-02T07:38:07.770481",
+        "updated_at": "2025-05-02T07:38:07.770481"
     }
 ]
