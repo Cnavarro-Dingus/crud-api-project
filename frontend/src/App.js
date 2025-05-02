@@ -34,6 +34,9 @@ function AppContent() {
   );
   const [currentUser, setCurrentUser] = useState(AuthService.getCurrentUser());
   const navigate = useNavigate();
+  // Estados para paginación y ordenado globales
+  const [resetPagination, setResetPagination] = useState(false);
+  const [resetSort, setResetSort] = useState(false);
 
   const handleAuthChange = () => {
     setIsAuthenticated(AuthService.isAuthenticated());
@@ -47,11 +50,19 @@ function AppContent() {
     navigate("/login");
   };
 
+  // Nuevo manejador para Home
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    setResetPagination(true);
+    setResetSort(true);
+    navigate("/");
+  };
+
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark" expand="lg" className="navbar">
         <Container>
-          <Navbar.Brand as={Link} to="/">
+          <Navbar.Brand as={Link} to="/" onClick={handleHomeClick} style={{cursor:'pointer'}}>
             <FaCar className="me-2" />
             Car App
           </Navbar.Brand>
@@ -130,7 +141,7 @@ function AppContent() {
             path="/"
             element={
               <PrivateRoute>
-                <CarList />
+                <CarList resetPagination={resetPagination} setResetPagination={setResetPagination} resetSort={resetSort} setResetSort={setResetSort} />
               </PrivateRoute>
             }
           />

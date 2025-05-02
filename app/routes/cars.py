@@ -51,14 +51,37 @@ def get_cars():
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 6))
     model = request.args.get('model', '').lower()
+    sort_by = request.args.get('sort_by', '').lower()  # nombre, año, rating
+    sort_dir = request.args.get('sort_dir', 'asc').lower()  # asc o desc
+    # Normalizar sort_by para aceptar 'name' como sinónimo de 'nombre'
+    if sort_by == 'name':
+        sort_by = 'nombre'
 
     cars = read_db()
 
     if model:
         cars = [car for car in cars if model in car['model'].lower()]
 
-    total_count = len(cars)
+    # Calcular average_rating para cada coche antes de ordenar
+    from routes.reviews import read_reviews_db
+    all_reviews = read_reviews_db()
+    for car in cars:
+        car_reviews = [review for review in all_reviews if review['car_id'] == car['id']]
+        if car_reviews:
+            average_rating = sum(review['rating'] for review in car_reviews) / len(car_reviews)
+            car['average_rating'] = round(average_rating, 1)
+        else:
+            car['average_rating'] = None
 
+    # Lógica de ordenación
+    if sort_by == 'nombre':
+        cars = sorted(cars, key=lambda x: (x.get('make') or '').lower(), reverse=(sort_dir=='desc'))
+    elif sort_by == 'año':
+        cars = sorted(cars, key=lambda x: x.get('year') or 0, reverse=(sort_dir=='desc'))
+    elif sort_by == 'rating':
+        cars = sorted(cars, key=lambda x: x.get('average_rating') if x.get('average_rating') is not None else -9999, reverse=(sort_dir=='desc'))
+
+    total_count = len(cars)
     start = (page - 1) * limit
     end = start + limit
     paginated_cars = cars[start:end]

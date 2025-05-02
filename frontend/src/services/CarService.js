@@ -83,10 +83,17 @@ class CarService {
     }
   }
 
-  static getAllCars(model = "", page = 1, limit = 6) {
+  static getAllCars(model = "", page = 1, limit = 6, sort_by = "", sort_dir = "asc") {
+    const params = [];
+    if (model) params.push(`model=${encodeURIComponent(model)}`);
+    if (page) params.push(`page=${page}`);
+    if (limit) params.push(`limit=${limit}`);
+    if (sort_by) params.push(`sort_by=${encodeURIComponent(sort_by)}`);
+    if (sort_dir) params.push(`sort_dir=${encodeURIComponent(sort_dir)}`);
+    const queryString = params.length ? `?${params.join("&")}` : "";
     return this.apiRequest(
       "get",
-      `/cars?model=${model}&page=${page}&limit=${limit}`,
+      `/cars${queryString}`,
       null,
       true
     );
